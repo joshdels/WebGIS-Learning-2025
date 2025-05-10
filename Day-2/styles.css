@@ -40,7 +40,7 @@ main {
 
 #map {
     flex: 1;
-    background-color: lightblue;
+    background-color: white;
     background-image: url("drainge_map.png");
     background-size: cover; 
     background-position: center;
