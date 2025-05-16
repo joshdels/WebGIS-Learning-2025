@@ -25,8 +25,8 @@ require(["esri/config", "esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLa
         symbol: {
           type: "picture-marker",
           url: "images/green_house.svg",
-          width: "25px",
-          height: "25px"
+          width: "30px",
+          height: "30px"
         }
       },
       {
@@ -34,16 +34,16 @@ require(["esri/config", "esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLa
         symbol: {
           type: "picture-marker",
           url: "images/red_house.svg",
-          width: "25px",
-          height: "25px",
+          width: "30px",
+          height: "30px",
         }
       }
       ],
       defaultSymbol: {
         type: "picture-marker",
         url: "images/black_house.svg",
-        width: "25px",
-        height: "25px",
+        width: "30px",
+        height: "30px",
       }
     }
   
@@ -67,6 +67,7 @@ require(["esri/config", "esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLa
       view: view,
       container: "legend",
       layerInfos: [
+      visible = true,
         {
           layer: houseLayer,
           title: "Houses Information"
@@ -74,5 +75,13 @@ require(["esri/config", "esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLa
       ]
     });
 
+    //6. Query 
+    const inputField = document.getElementById("thatQuery")
+    const button = document.getElementById("myQueryButton")
+    
+    button.addEventListener("click", function() {
+      inputField.value = "";
+      alert("Query Submitted");
+    })
   
   });
