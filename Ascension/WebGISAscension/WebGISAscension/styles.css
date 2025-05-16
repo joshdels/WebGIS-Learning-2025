@@ -1,0 +1,47 @@
+html, body {
+  height: 100%; /* Ensures the entire page fills the viewport */
+  margin: 0;
+  padding: 0;
+  
+  display: flex;
+  flex-direction: column; /* Aligns content vertically */
+  
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background-color: #0b85a3;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+header img {
+  vertical-align: middle;
+  width: 50px;
+  height: auto;
+  margin-right: 15px;
+}
+
+header h1 {
+  display: inline;
+  vertical-align: middle;
+}
+
+main {
+  display: flex; /* Enables flex properties for the main container */
+  flex: 1; /* Takes up all available space after header */
+}
+
+#sidebar {
+  padding: 20px;
+  width: 300px; /* fixed width for the sidebar */
+  background-color: rgb(236, 236, 236); /* light grey background */
+}
+
+#map {
+  flex: 1; /* Allows the map to take up the remaining space */
+  background-image: url("https://i.pinimg.com/474x/e6/6a/c6/e66ac69cc1cd02fa81bff8cbea522284.jpg");
+  background-size: cover;
+  background-position: center;
+}
