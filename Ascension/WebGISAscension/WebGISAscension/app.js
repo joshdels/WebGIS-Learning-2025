@@ -1,5 +1,15 @@
-require(["esri/config", "esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLayer", "esri/renderers/UniqueValueRenderer", "esri/widgets/Legend"],
-  function(esriConfig, Map, MapView, GeoJSONLayer, Legend) {
+require(["esri/config", 
+  "esri/Map", 
+  "esri/views/MapView", 
+  "esri/layers/GeoJSONLayer", 
+  "esri/renderers/UniqueValueRenderer", 
+  "esri/widgets/Legend"],
+  function(
+    esriConfig, 
+    Map, MapView, 
+    GeoJSONLayer,
+    UniqueValueRenderer,
+    Legend) {
   
     //esriConfig.apiKey = "YOUR_API_KEY";
   
@@ -55,7 +65,7 @@ require(["esri/config", "esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLa
 
     // 4. Files
     const houseLayer = new GeoJSONLayer({
-      url: "locations.geojson",
+      url: "data/locations.geojson",
       copyright: "Joshua Practice ArcSDK :)",
       renderer: houseLayerRenderer,
       popupTemplate: popupHouses,
@@ -67,7 +77,7 @@ require(["esri/config", "esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLa
       view: view,
       container: "legend",
       layerInfos: [
-      visible = true,
+      // visible = true,
         {
           layer: houseLayer,
           title: "Houses Information"
