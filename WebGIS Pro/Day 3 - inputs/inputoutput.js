@@ -11,4 +11,4 @@ document.getElementById('myButton').addEventListener("click", function() {
   let ourTextfield = document.getElementById("someInput");
   ourTextfield = document.getElementById("myHeader").innerHTML;
   // alert(headerText);
-})
+});
