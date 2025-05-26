@@ -27,10 +27,21 @@ function getDistance(x1, y1, x2, y2) {
 console.log(getDistance(1,2,3,10))
 
 // ANOTHER EXERCISE
+let position = -1;
 function indexOfString(searchString, characterToFind) {
-  return searchString.indexOf(characterToFind);
+  for (let i = 0; i < searchString.length; i++) {
+    let currentCharacter = searchString[i];
+    if ( currentCharacter == characterToFind) {
+      position = i;
+      break;
+    }
+      
+  }
+  return position;
 }
 
 let ourString = "POINT(1 1)";
-console.log(indexOfString(ourString, "("));
+let characterToFind = "(";
+let poss = indexOfString(ourString, characterToFind);
+console.log(poss);
 
