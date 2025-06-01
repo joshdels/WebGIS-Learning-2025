@@ -1,0 +1,27 @@
+#citiesTable {
+  border: 1px solid;
+  background-color: red;
+  background-image: linear-gradient(to bottom, white, lightblue);
+}
+
+body {
+  font-family: 'Times New Roman';
+}
+
+h1 {
+  text-transform: uppercase;
+  color: Blue;
+}
+
+p {
+  text-indent: 15px;
+  letter-spacing: 3px;
+}
+
+input[type="button"] {
+  background-color: lightblue;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
