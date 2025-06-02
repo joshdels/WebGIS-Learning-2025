@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
     <title>My First HTML Website</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
@@ -13,6 +13,7 @@
     </div>
     <div id="mainSection">
       <img
+        id="myImage"
         src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
         alt="girl with camera"
         width="400"
@@ -23,13 +24,15 @@
       <input type="text" id="username" placeholder="Enter your name" />
       <input type="button" id="greetingButton" value="See a greating" />
       <p><a href="https://www.w3schools.com">You can go to w3schools</a></p>
-      <ol class="center">
-        <li>Webgis Concepts</li>
-        <li>Javascript</li>
-        <li>HTML</li>
-      </ol>
+      <div class="container">
+        <ol id="stepWebGIS">
+          <li>Webgis Concepts</li>
+          <li>Javascript</li>
+          <li>HTML</li>
+        </ol>
+      </div>
       <p>Here are my favorite Cities in europe</p>
-      <table id="citiesTable" class="center">
+      <table id="citiesTable">
         <tr>
           <th>City</th>
           <th>Location</th>
