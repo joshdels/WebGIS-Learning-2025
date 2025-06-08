@@ -8,6 +8,7 @@ require([
   "esri/widgets/Legend",
   "esri/widgets/LayerList",
   "esri/layers/support/LabelClass",
+  "esri/rest/support/Query"
 ], function (
   esriConfig,
   Map,
@@ -17,7 +18,8 @@ require([
   PopupTemplate,
   Legend,
   LayerList,
-  LabelClass
+  LabelClass,
+  Query
 ) {
   //API
   esriConfig.apiKey =
@@ -39,7 +41,7 @@ require([
     type: "simple",
     symbol: trailheadsSymbol,
   };
-  
+
   const trailLinesRenderer = {
     type: "simple",
     symbol: {
@@ -49,9 +51,9 @@ require([
       outline: {
         width: 1,
         color: "white",
-      }
-    }
-  }
+      },
+    },
+  };
 
   const parksRenderer = {
     type: "simple",
@@ -61,32 +63,29 @@ require([
       outline: {
         width: "1px",
         color: "black",
-      }
-    }
-  }
+      },
+    },
+  };
 
-  //// POP OUT 
+  //// POP OUT
   let trailheadsPT = new PopupTemplate({
     title: "The name of trail: {TRL_NAME}",
     content:
       "The Trail head is in the park {PARK_NAME} <br>" +
       '<img src="https://yt3.googleusercontent.com/ytc/AIdro_lWrxG_fpbnTzQokp3OGudXc5dgZtHPFYm5LyC6kWRZT5g=s900-c-k-c0x00ffffff-no-rj" alt="dota image" style="width:200px; heigth: 200px"></img>',
   });
-  
+
   let trailLinesPT = new PopupTemplate({
     title: "The name of trail: {TRL_NAME}",
-    content:
-      "Elevation Gain: {ELEV_MAX}",
+    content: "Elevation Gain: {ELEV_MAX}",
   });
 
   let parksPT = new PopupTemplate({
     title: "The name of Park: {PARK_NAME }",
-    content:
-      "Acres: {GIS_ACRES}",
+    content: "Acres: {GIS_ACRES}",
   });
-  
 
-  //// DATA 
+  //// DATA
   // trailheads
   const trailheadsLayer = new FeatureLayer({
     popupTemplate: trailheadsPT,
@@ -111,8 +110,7 @@ require([
     url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Parks_and_Open_Space_Styled/FeatureServer/0",
   });
 
-
-  map.add(parksLayer)
+  map.add(parksLayer);
   map.add(trailLinesLayer);
   map.add(trailheadsLayer);
 
@@ -150,5 +148,25 @@ require([
   });
 
   trailheadsLayer.labelingInfo = [trailName];
+
   
+
+  // Event Listener
+  document.getElementById("queryButton").addEventListener("click", function() {
+    let currentWhere = document.getElementById("whereClause").value;
+    queryFeatureLayer(currentWhere);
+  })
+
+  function queryFeatureLayer(whereClause) {
+  // Query
+    const query = new Query();
+    query.where = whereClause;
+    query.outSpatialReference = { wkid: 102100 };
+    query.returnGeometry = true;
+    query.outFields = ["*"];
+
+    parksLayer.queryFeatures(query).then(function (results) {
+      console.log(results.features); // prints the array of features to the console
+    });
+  }
 });
