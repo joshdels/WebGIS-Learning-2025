@@ -163,10 +163,28 @@ require([
     query.where = whereClause;
     query.outSpatialReference = { wkid: 102100 };
     query.returnGeometry = true;
-    query.outFields = ["*"];
+    query.outFields = [""];
 
     parksLayer.queryFeatures(query).then(function (results) {
-      console.log(results.features); // prints the array of features to the console
+      console.log(results.features);
+      createTable();
     });
+  }
+
+  function createTable() {
+    //Assignments
+      // iterate the features of the featureSet
+      // the feature attributes are stored in an object as properties/keys
+      // you can iterate thos and get the values and write it in the table
+
+      // get attribute first for the first feature with code
+      // get the feature from the featureset
+      // get the attributes from a feature (should be objecct)
+      // iterate through them and console.log the values 
+
+    let featureTablePH = document.getElementById("featureTablePH");
+    featureTablePH.innerHTML = "<table><tr><th>Company</th><th>Contact</th><th>Country</th></tr>" +
+      "<tr><td>Alfreds Futterkiste</td><td>Maria Anders</td><td>Germany</td></tr><tr>" + 
+      "<td>Centro comercial Moctezuma</td><td>Francisco Chang</td><td>Mexico</td></tr></table>";
   }
 });
