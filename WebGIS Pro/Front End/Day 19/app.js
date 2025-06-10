@@ -142,6 +142,7 @@ require([
     expandIcon: "clipboard", // see https://developers.arcgis.com/calcite-design-system/icons/
     // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
     view: view,
+    expanded: false,
     content: layerList,
   });
 
@@ -149,6 +150,9 @@ require([
     expandIcon: "legend-right", // see https://developers.arcgis.com/calcite-design-system/icons/
     // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
     view: view,
+    expandTooltip: "Legend",
+    expanded: true,
+    label: "Legend",
     content: legend,
   });
 
@@ -213,22 +217,14 @@ require([
     let featureTablePH = document.getElementById("featureTablePH");
     featureTablePH.innerHTML =
       "<table><tr><th>Park Name</th><th>Type</th><th>Manny</th></tr>" +
-      "<tr><td>" +
-      parkName +
-      "</td><td>" +
-      parkType +
-      "</td><td>" +
-      parkAccess +
-      "</td></tr><tr>" +
-      "</table>";
+      "<tr><td>" + parkName + "</td><td>" + parkType + "</td><td>" + parkAccess + "</td></tr><tr>" + "</table>";
   }
 
   let queryExpand = new Expand({
-  expandIcon: "legend-right", // see https://developers.arcgis.com/calcite-design-system/icons/
-  // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
-  view: view,
-  expandIconClass: "table",
-  content: document.getElementById("query"),
+    expandIconClass: "table",
+    view: view,
+    expanded: false,
+    content: document.getElementById("query"),
   });
   view.ui.add(queryExpand, "bottom-left");
 });
