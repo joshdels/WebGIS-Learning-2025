@@ -1,0 +1,25 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#myView{
+  width: 100%;
+  height: 100%;
+}
+
+.esri-widget--panel{
+  width: 200px !important;
+}
+
+#featureTable {
+  width: 100%;
+  height: 0%;
+}
+
+#query {
+  background-color: white;
+  padding: 20px;
+}

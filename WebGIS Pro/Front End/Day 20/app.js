@@ -177,10 +177,21 @@ require([
     let currentWhere = document.getElementById("whereClause").value;
     queryFeatureLayer(currentWhere);
 
-
-
-
+    //height adjuster of the query
+    let myViewElement = document.getElementById("myView");
+    let tableElement = document.getElementById("featureTablePH");
+    myViewElement.style.height = "70%";
+    tableElement.style.height = "30%";
   });
+
+  //Clear button
+  document.getElementById("clearButton").addEventListener("click", function () {
+    let myViewElement = document.getElementById("myView");
+    let tableElement = document.getElementById("featureTablePH");
+    myViewElement.style.height = "100%";
+    tableElement.style.display = "none";
+  });
+  
 
   function queryFeatureLayer(whereClause) {
     //// Query
@@ -191,37 +202,25 @@ require([
     query.outFields = ["*"];
 
     parksLayer.queryFeatures(query).then(function (results) {
-      console.log(results.features);
-
-      //Assignments
-      // iterate the features of the featureSet
-      // the feature attributes are stored in an object as properties/keys
-      // you can iterate thos and get the values and write it in the table
-
-      // get attribute first for the first feature with code
-      // get the feature from the featureset
-      // get the attributes from a feature (should be objecct)
-      // iterate through them and console.log the values
-
       let featureSet = results.features;
-      for (let i = 0; i < featureSet.length; i++) {
-        console.log(featureSet[i].attributes);
-      }
-
-      let firstLayer = featureSet[0].attributes;
-      parkName = firstLayer.PARK_NAME;
-      parkType = firstLayer.TYPE;
-      parkAccess = firstLayer.ACCESS_TYP;
-
-      createTable(parkName, parkType, parkAccess);
+      createTable(featureSet);
     });
   }
 
-  function createTable(parkName, parkType, parkAccess) {
+  function createTable(featureSet) {
     let featureTablePH = document.getElementById("featureTablePH");
-    featureTablePH.innerHTML =
-      "<table><tr><th>Park Name</th><th>Type</th><th>Manny</th></tr>" +
-      "<tr><td>" + parkName + "</td><td>" + parkType + "</td><td>" + parkAccess + "</td></tr><tr>" + "</table>";
+
+    // heads and row components
+    let headerRow = "";
+    const headers = Object.keys(featureSet[0].attributes);
+    headers.forEach(header => {
+      headerRow += "<th>" + header + "</th>" ;
+    });
+
+    // Creation of table
+    let table = "<table><tr>" + headerRow + "</tr></table>";
+    featureTablePH.innerHTML = table;
+
   }
 
   let queryExpand = new Expand({
