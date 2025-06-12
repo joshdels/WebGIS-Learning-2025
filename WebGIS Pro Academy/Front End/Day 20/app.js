@@ -10,7 +10,7 @@ require([
   "esri/layers/support/LabelClass",
   "esri/rest/support/Query",
   "esri/widgets/Expand",
-  "esri/widgets/Search",
+  "esri/Graphic"
 ], function (
   esriConfig,
   Map,
@@ -23,7 +23,7 @@ require([
   LabelClass,
   Query,
   Expand,
-  Search
+  Graphic
 ) {
   //API
   esriConfig.apiKey =
@@ -182,6 +182,7 @@ require([
     let tableElement = document.getElementById("featureTablePH");
     myViewElement.style.height = "70%";
     tableElement.style.height = "30%";
+    tableElement.style.display = "block";
   });
 
   //Clear button
@@ -212,13 +213,28 @@ require([
 
     // heads and row components
     let headerRow = "";
-    const headers = Object.keys(featureSet[0].attributes);
-    headers.forEach(header => {
-      headerRow += "<th>" + header + "</th>" ;
-    });
+    let attributesRow = "";
+    
+    for (let i=0; i < featureSet.length; i++){
+      if (i=== 0) {
+        const headers = Object.keys(featureSet[0].attributes);
+        headers.forEach(header => {
+          headerRow += "<th>" + header + "</th>";
+        })
+      }; 
+
+      let rowContent = "";
+      const rows = Object.values(featureSet[i].attributes);
+      rows.forEach(row => {
+        rowContent += "<td>" + row + "</td>";
+      });
+      attributesRow += "<tr>" + rowContent + "</tr>"
+    };
+
+    console.log(attributesRow);
 
     // Creation of table
-    let table = "<table><tr>" + headerRow + "</tr></table>";
+    let table = "<table><tr>" + headerRow + "</tr>" + attributesRow + "</table>";
     featureTablePH.innerHTML = table;
 
   }
@@ -231,3 +247,4 @@ require([
   });
   view.ui.add(queryExpand, "bottom-left");
 });
+//add search button ID of fields then highlight it
