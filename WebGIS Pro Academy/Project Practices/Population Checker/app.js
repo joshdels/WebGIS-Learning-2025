@@ -5,7 +5,8 @@ require([
   "esri/layers/GeoJSONLayer",
   "esri/renderers/ClassBreaksRenderer",
   "esri/widgets/Legend",
-  "esri/widgets/Popup"
+  "esri/widgets/Home",
+  "esri/rest/support/Query",
 ], function (
   esriConfig,
   Map,
@@ -13,7 +14,8 @@ require([
   GeoJSONLayer,
   ClassBreaksRenderer,
   Legend,
-  Popup
+  Home,
+  Query
 ) {
   // API
   esriConfig.apiKey =
@@ -98,7 +100,7 @@ require([
   });
 
   // Popup
-  const popUpContent = ({
+  const popUpContent = {
     title: "Brgy. {ADM4_EN}",
     content: "Population: {pop_Popula} <br> Area (sqkm): {AREA_SQKM}",
     fieldInfos: [
@@ -106,11 +108,11 @@ require([
         fieldName: "AREA_SQKM",
         format: {
           places: 2,
-          digitSeparator: true
-        }
-      }
-    ]
-  })
+          digitSeparator: true,
+        },
+      },
+    ],
+  };
 
   //Data
   const layer = new GeoJSONLayer({
@@ -129,8 +131,8 @@ require([
   const view = new MapView({
     container: "myMap",
     map: map,
-    center: layer.fullExtent,
-    zoom: 4,
+    center: [125.810692, 7.401924],
+    zoom: 11,
   });
 
   // Create the legend widget
@@ -143,12 +145,23 @@ require([
       },
     ],
   });
-  
-view.ui.add(legend, "bottom-right");
-view.ui.move("zoom","top-right");
 
-layer.when(() => {
-  view.goTo(layer.fullExtent);
-});
+  view.ui.add(legend, "bottom-right");
+  view.ui.move("zoom", "top-right");
 
+  cityZoom();
+
+  const homeWidget = new Home({
+    view: view,
+  });
+
+  view.ui.add(homeWidget, "top-right");
+
+
+  /////////////// interactive functions
+  function cityZoom() {
+    layer.when(() => {
+      view.goTo(layer.fullExtent);
+    });
+  }
 });
