@@ -7,6 +7,7 @@ require([
   "esri/widgets/Legend",
   "esri/widgets/Home",
   "esri/rest/support/Query",
+  "esri/Graphic",
 ], function (
   esriConfig,
   Map,
@@ -15,7 +16,8 @@ require([
   ClassBreaksRenderer,
   Legend,
   Home,
-  Query
+  Query,
+  Graphic
 ) {
   // API
   esriConfig.apiKey =
@@ -102,8 +104,9 @@ require([
   // Popup
   const popUpContent = {
     title: "Brgy. {ADM4_EN}",
-content: "Population: {pop_Popula} <br> Area (sqkm): {AREA_SQKM} <br>" +
-  '<img src="{img_url}" alt="location image" style="width:200px; height:200px;">',
+    content:
+      "Population: {pop_Popula} <br> Area (sqkm): {AREA_SQKM} <br>" +
+      '<img src="{img_url}" alt="location image" style="width:200px; height:200px;">',
     fieldInfos: [
       {
         fieldName: "AREA_SQKM",
@@ -198,25 +201,50 @@ content: "Population: {pop_Popula} <br> Area (sqkm): {AREA_SQKM} <br>" +
         let selectedItem = document.getElementById("selectList").value;
         console.log("Query Click " + selectedItem);
 
-    const selectedPlace = new Query();
-      selectedPlace.outSpatialReference = { wkid: 102100 };
-      selectedPlace.returnGeometry = true;
-      selectedPlace.where = `ADM4_EN = '${selectedItem}'`;
-      selectedPlace.outFields = ["*"];
+        const selectedPlace = new Query();
+        selectedPlace.outSpatialReference = { wkid: 102100 };
+        selectedPlace.returnGeometry = true;
+        selectedPlace.where = `ADM4_EN = '${selectedItem}'`;
+        selectedPlace.outFields = ["*"];
 
-      layer.queryFeatures(selectedPlace).then(function (results) {
+        layer.queryFeatures(selectedPlace).then(function (results) {
           let selectItem = results.features[0].attributes;
-          console.log(selectItem);
+          let selectedGeometry = results.features[0].geometry;
+          view.goTo(selectedGeometry);
+
+          let queryItem = document.getElementById("queryItem");
+          queryItem.style.display = "block";
 
           queryItemDiv = document.getElementById("queryItem");
-          queryItem = `<br> <h3>Barangay ${selectItem.ADM4_EN}</h3> 
+          queryItem = `<br> <h3>Barangay ${selectItem.ADM4_EN}</h3>
           <p>It has a population of ${selectItem.pop_Popula} 
-          <p> with an area of ${selectItem.AREA_SQKM.toFixed(2)} sqkm`;
+          with an area of ${selectItem.AREA_SQKM.toFixed(2)} sqkm </p> 
+          <br> <img src="${selectItem.img_url}" 
+          style="height:300px; width:400px;" />`;
 
           queryItemDiv.innerHTML = queryItem;
-      });
-  });
-};
 
-findPlace();
+          let clearButton = document.getElementById("clearButton");
+          clearButton.style.display = "block";
+        });
+
+        let informationStyle = document.getElementById("informationTab");
+        informationStyle.style.top = "28%";
+      });
+  }
+
+  document.getElementById("clearButton").addEventListener("click", function () {
+    let informationStyle = document.getElementById("informationTab");
+    informationStyle.style.top = "78%";
+
+    let clearButton = document.getElementById("clearButton");
+    clearButton.style.display = "none";
+
+    let queryItem = document.getElementById("queryItem");
+    queryItem.style.display = "none";
+
+    cityZoom();
+  });
+
+  findPlace();
 });

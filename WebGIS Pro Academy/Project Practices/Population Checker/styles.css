@@ -93,3 +93,9 @@ html, body{
   text-align: center;
 }
 
+#clearButton{
+  display: none;
+  width: 80px;
+  height: 30px;
+}
+
