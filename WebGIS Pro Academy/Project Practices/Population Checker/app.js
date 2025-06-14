@@ -102,7 +102,8 @@ require([
   // Popup
   const popUpContent = {
     title: "Brgy. {ADM4_EN}",
-    content: "Population: {pop_Popula} <br> Area (sqkm): {AREA_SQKM}",
+content: "Population: {pop_Popula} <br> Area (sqkm): {AREA_SQKM} <br>" +
+  '<img src="{img_url}" alt="location image" style="width:200px; height:200px;">',
     fieldInfos: [
       {
         fieldName: "AREA_SQKM",
@@ -157,11 +158,65 @@ require([
 
   view.ui.add(homeWidget, "top-right");
 
-
-  /////////////// interactive functions
+  /////////////// interactive functions /////////////////
   function cityZoom() {
     layer.when(() => {
       view.goTo(layer.fullExtent);
     });
   }
+
+  // Populate Empty Select List
+  let barangayList = [];
+  selectOptions = "";
+  let selectElement = document.getElementById("selectList");
+
+  const queryBarangayList = new Query();
+  queryBarangayList.outSpatialReference = { wkid: 102100 };
+  queryBarangayList.returnGeometry = false;
+  queryBarangayList.outFields = ["*"];
+
+  layer.queryFeatures(queryBarangayList).then(function (results) {
+    let featureSet = results.features;
+
+    for (let i = 0; i < featureSet.length; i++) {
+      let barangays = featureSet[i].attributes.ADM4_EN;
+      barangayList.push(barangays);
+    }
+
+    barangayList.forEach((item) => {
+      selectOptions += `<option value="${item}">${item}</option>`;
+    });
+
+    selectElement.innerHTML = selectOptions;
+  });
+
+  // Barangay Finder
+  function findPlace() {
+    document
+      .getElementById("queryButton")
+      .addEventListener("click", function () {
+        let selectedItem = document.getElementById("selectList").value;
+        console.log("Query Click " + selectedItem);
+
+    const selectedPlace = new Query();
+      selectedPlace.outSpatialReference = { wkid: 102100 };
+      selectedPlace.returnGeometry = true;
+      selectedPlace.where = `ADM4_EN = '${selectedItem}'`;
+      selectedPlace.outFields = ["*"];
+
+      layer.queryFeatures(selectedPlace).then(function (results) {
+          let selectItem = results.features[0].attributes;
+          console.log(selectItem);
+
+          queryItemDiv = document.getElementById("queryItem");
+          queryItem = `<br> <h3>Barangay ${selectItem.ADM4_EN}</h3> 
+          <p>It has a population of ${selectItem.pop_Popula} 
+          <p> with an area of ${selectItem.AREA_SQKM.toFixed(2)} sqkm`;
+
+          queryItemDiv.innerHTML = queryItem;
+      });
+  });
+};
+
+findPlace();
 });
