@@ -139,16 +139,14 @@ require([
 
   // view.ui.add(layerList, "top-right");
   let layerListExpand = new Expand({
-    expandIcon: "clipboard", // see https://developers.arcgis.com/calcite-design-system/icons/
-    // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
+    expandIcon: "clipboard",
     view: view,
     expanded: false,
     content: layerList,
   });
 
   let legendExpand = new Expand({
-    expandIcon: "legend-right", // see https://developers.arcgis.com/calcite-design-system/icons/
-    // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
+    expandIcon: "legend-right",
     view: view,
     expandTooltip: "Legend",
     expanded: true,
@@ -247,6 +245,7 @@ require([
         rowContent += "<td>" + row + "</td>";
       });
       attributesRow += "<tr>" + rowContent + "</tr>";
+      
     }
 
     // Creation of table
@@ -262,5 +261,18 @@ require([
     content: document.getElementById("query"),
   });
   view.ui.add(queryExpand, "bottom-left");
+
+  //ganna review and revise this one
+  function zoomToTableGeometry() {
+    let table = document.getElementById("featureTablePH");
+
+    table.addEventListener("click", function (event) {
+      const row = event.target.closest("tr");
+      if (row) {
+        alert("you clicked: " + row.textContent);
+      }
+    });
+  }
+
+  zoomToTableGeometry()
 });
-//add search button ID of fields then highlight it
