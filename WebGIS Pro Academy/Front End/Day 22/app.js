@@ -11,7 +11,6 @@ require([
   "esri/rest/support/Query",
   "esri/widgets/Expand",
   "esri/Graphic",
-  "esri/widgets/Sketch"
 ], function (
   esriConfig,
   Map,
@@ -24,8 +23,7 @@ require([
   LabelClass,
   Query,
   Expand,
-  Graphic,
-  Sketch
+  Graphic
 ) {
   //API
   esriConfig.apiKey =
@@ -275,19 +273,6 @@ require([
       }
     });
   }
+
   zoomToTableGeometry()
-
-  // Find all queried parks in a custom drawn geometry 
-  // Queried polygons
-  // 1. sketch widget (with just the option to draw polygons) - on progress
-  // 2. When user draws a polygon and finishes
-  // 3. When Check which parks are inside that polygon (let geometry arrays = []) are inside the polygon
-  // 4. Create a list with that parks
-
-  let sketch = new Sketch({
-  layer: layer,
-  view: view
-});
-
-
 });

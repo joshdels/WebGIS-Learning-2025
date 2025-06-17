@@ -1,0 +1,44 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#myView{
+  width: 100%;
+  height: 100%;
+}
+
+.esri-widget--panel{
+  width: 200px !important;
+}
+
+#query {
+  background-color: white;
+  padding: 20px;
+}
+
+#featureTable {
+  width: 200px;
+  overflow-x: scroll;
+  box-sizing: border-box;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 1200px;
+  width: max-content;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #049faa;
+  color: white;
+}
