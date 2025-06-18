@@ -30,11 +30,14 @@ require([
   //API
   esriConfig.apiKey =
     "AAPTxy8BH1VEsoebNVZXo8HurFqQ61x9cGnw88FPfWt2DoxASckmLACOn-AUhGMilYabU8I9Y3E6Y1KV9s9QyuykiSZvXowrXyyu0zrO_IhKbpMNXAvvxvNeeidKfdfBa5M6umAjryN60lyjygMpUmUgMb7CX-C34h0yOCtEKNZEjrKOPg24jZIi4ry7j64UR8errlHCIMwjXOhLyQpxUELOO229hcCFvy9oKSpMDVGBuhk.AT1_UhnG8Nri";
+  
+  const graphicsLayer = new Graphic();
 
   // BaseMap
   const map = new Map({
     basemap: "arcgis/streets-relief",
   });
+
 
   // Renderer
   let trailheadsSymbol = new PictureMarkerSymbol({
@@ -277,17 +280,18 @@ require([
   }
   zoomToTableGeometry()
 
-  // Find all queried parks in a custom drawn geometry 
-  // Queried polygons
-  // 1. sketch widget (with just the option to draw polygons) - on progress
-  // 2. When user draws a polygon and finishes
-  // 3. When Check which parks are inside that polygon (let geometry arrays = []) are inside the polygon
-  // 4. Create a list with that parks
+
+
+
+
 
   let sketch = new Sketch({
-  layer: layer,
-  view: view
+  layer: graphicsLayer,
+  view: view,
+  creationMode: "update"
 });
+
+  view.ui.add(sketch, "top-right");
 
 
 });

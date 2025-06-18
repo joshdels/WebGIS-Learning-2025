@@ -11,6 +11,9 @@ require([
   "esri/rest/support/Query",
   "esri/widgets/Expand",
   "esri/Graphic",
+  "esri/widgets/Sketch",
+  "esri/layers/GraphicsLayer",
+  "esri/geometry/operators/intersectionOperator",
 ], function (
   esriConfig,
   Map,
@@ -23,7 +26,10 @@ require([
   LabelClass,
   Query,
   Expand,
-  Graphic
+  Graphic,
+  Sketch,
+  GraphicsLayer,
+  intersectionOperator
 ) {
   //API
   esriConfig.apiKey =
@@ -33,6 +39,8 @@ require([
   const map = new Map({
     basemap: "arcgis/streets-relief",
   });
+
+  const graphicsLayer = new GraphicsLayer();
 
   // Renderer
   let trailheadsSymbol = new PictureMarkerSymbol({
@@ -117,6 +125,7 @@ require([
   map.add(parksLayer);
   map.add(trailLinesLayer);
   map.add(trailheadsLayer);
+  map.add(graphicsLayer);
 
   //View
   const view = new MapView({
@@ -245,7 +254,6 @@ require([
         rowContent += "<td>" + row + "</td>";
       });
       attributesRow += "<tr>" + rowContent + "</tr>";
-      
     }
 
     // Creation of table
@@ -274,5 +282,79 @@ require([
     });
   }
 
-  zoomToTableGeometry()
+  zoomToTableGeometry();
+
+  ///// SKETCH SECTION
+  // Find all queried parks in a custom drawn geometry  - DONE
+  // Queried polygons
+  // 1. sketch widget (with just the option to draw polygons) - done
+  // 2. When user draws a polygon and finishes
+  // 3. When Check which parks are inside that polygon (let geometry arrays = []) are inside the polygon
+  // 4. Create a list with that parks
+
+  let sketch = new Sketch({
+    view: view,
+    layer: graphicsLayer,
+    snappingOptions: {
+      enabled: true,
+      featureSources: [
+        {
+          layer: graphicsLayer,
+        },
+      ],
+    },
+    visibleElements: {
+      createTools: {
+        point: false,
+        circle: false,
+        polyline: false,
+      },
+      selectionTools: {
+        "rectangle-selection": false,
+        "lasso-selection": false,
+      },
+      undoRedoMenu: false,
+      settingsMenu: false,
+    },
+  });
+
+  // Listen to sketch widget's create event.
+  sketch.on("create", function (event) {
+    if (event.state === "start") {
+      graphicsLayer.removeAll();
+    }
+    if (event.state === "complete") {
+      let drawGeometry = event.graphic.geometry;
+      let intersectingParks = [];
+      // query it
+      const query = parksLayer.createQuery();
+      query.returnGeometry = true;
+      query.outFields = ["*"];
+
+      parksLayer.queryFeatures(query).then(function (results) {
+        let queriedParks = results.features;
+
+        for (let i = 0; i < queriedParks.length; i++) {
+          const contains = intersectionOperator.execute(
+            drawGeometry,
+            queriedParks[i].geometry
+          );
+          if (contains) {
+            intersectingParks.push(queriedParks[i].attributes["PARK_NAME"]);
+          }
+        }
+
+        console.log(intersectingParks);
+      });
+    }
+  });
+
+  view.ui.add(sketch, "top-right");
+
+  //Spatial Relationships
+
+  // const contains = containsOperator.execute(graphicsLayer, squareInside);
+  // if (contains) {
+  //   console.log("The outer square contains the inner square.");
+  // }
 });
