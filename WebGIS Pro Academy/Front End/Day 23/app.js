@@ -46,7 +46,7 @@ require([
 
   const graphicsLayer = new GraphicsLayer({
     title: "Graphics",
-    listMode: "hide",
+    listMode: "hide"
   });
 
   // Renderer
@@ -145,6 +145,9 @@ require([
     },
   });
 
+
+
+
   //Labels
   const trailName = new LabelClass({
     labelExpressionInfo: { expression: "$feature.TRL_NAME" },
@@ -242,7 +245,7 @@ require([
   }
 
   //Widgets
-  // Legend
+    // Legend
   let legend = new Legend({
     view: view,
     container: "legend-container",
@@ -264,21 +267,18 @@ require([
   });
 
   //////// for calcite Practice
+  const myView = document.getElementById("myView");
 
-  view.when(function () {
-    myView.addEventListener("arcgisViewReadyChange", (evt) => {
-      // const { title, description, thumbnailUrl, avgRating } =myView.map.portalItem;
-      document.querySelector("#header-title").heading =
-        "My Best Practice Web GIS";
-      document.querySelector("#item-description").innerHTML =
-        "This is my 6/21/2025 practice of webMaps";
-      document.querySelector("#item-thumbnail").src = map.basemap.thumbnailUrl;
-      document.querySelector("#item-rating").value = 4.77;
+  myView.addEventListener("arcgisViewReadyChange", (evt) => {
+    // const { title, description, thumbnailUrl, avgRating } =myView.map.portalItem;
+    document.querySelector("#header-title").heading = "My Best Practice Web GIS";
+    document.querySelector("#item-description").innerHTML = "This is my 6/21/2025 practice of webMaps";
+    document.querySelector("#item-thumbnail").src = map.basemap.thumbnailUrl;
+    document.querySelector("#item-rating").value = 4.77;
 
-      myView.view.padding = {
-        left: 49,
-      };
-    });
+    myView.view.padding = {
+      left: 49,
+    };
   });
 
   let activeWidget;
@@ -308,7 +308,7 @@ require([
     .querySelector("calcite-action-bar")
     .addEventListener("click", handleActionBarClick);
 
-  /////////////////////////////
+    /////////////////////////////
 
   let actionBarExpanded = false;
 
