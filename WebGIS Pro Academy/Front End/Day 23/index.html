@@ -23,7 +23,9 @@
   </head>
 
   <body>
-    <calcite-shell content-behind>
+    <calcite-loader></calcite-loader>
+
+    <calcite-shell content-behind hidden>
       <calcite-navigation slot="header">
         <calcite-navigation-logo id="header-title" heading="My WebGIS" heading-level="1" slot="logo" >
         </calcite-navigation-logo>
@@ -41,19 +43,19 @@
 
         <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
         <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" closed closable>
-          <arcgis-layer-list drag-enabled reference-element="myView" visibility-appearance="checkbox"></arcgis-layer-list>
+          <arcgis-layer-list id="layer-container" drag-enabled reference-element="myView" visibility-appearance="checkbox"></arcgis-layer-list>
         </calcite-panel>
         <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" closed closable>
           <arcgis-basemap-gallery reference-element="myView"></arcgis-basemap-gallery state="enabled">
         </calcite-panel>
         <calcite-panel heading="Legend" height-scale="l" data-panel-id="legend" closed closable>
-          <arcgis-legend legend-style="classic" reference-element="myView"></arcgis-legend>
+          <arcgis-legend id="legend-container" legend-style="classic" reference-element="myView"></arcgis-legend>
         </calcite-panel>
         <calcite-panel heading="Bookmarks" height-scale="l" data-panel-id="bookmarks" closed closable >
-          <arcgis-bookmarks editing-enabled="false" reference-element="myView"></arcgis-bookmarks>
+          <arcgis-bookmarks id="bookmarks-container" editing-enabled="false" reference-element="myView"></arcgis-bookmarks>
         </calcite-panel>
         <calcite-panel heading="Print" height-scale="l" data-panel-id="print" closed closable>
-          <arcgis-print allowed-formats="all" allowed-layouts="all" include-default-templates="false"
+          <arcgis-print id="print-container" allowed-formats="all" allowed-layouts="all" include-default-templates="false"
             reference-element="myView"></arcgis-print>
         </calcite-panel>
         <!-- Info panel (populates with info from the web map) -->
@@ -74,7 +76,8 @@
 
       </calcite-shell-panel>
   
-      <div id="myView"></div>
+      <!-- <div id="myView"></div> -->
+      <arcgis-map id="myView"></arcgis-map>
       <div id="featureTablePH"></div>
       <div id="query">
         <input value="Type = 'Local Park'" type="text" id="whereClause" /> <br />

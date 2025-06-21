@@ -44,7 +44,10 @@ require([
     basemap: "arcgis/streets-relief",
   });
 
-  const graphicsLayer = new GraphicsLayer();
+  const graphicsLayer = new GraphicsLayer({
+    title: "Graphics",
+    listMode: "hide",
+  });
 
   // Renderer
   let trailheadsSymbol = new PictureMarkerSymbol({
@@ -141,39 +144,6 @@ require([
       left: 49,
     },
   });
-
-  // Legend
-  let legend = new Legend({
-    view: view,
-    container: "legend",
-  });
-  // view.ui.add(legend, "bottom-right");
-
-  // Widget
-  let layerList = new LayerList({
-    view: view,
-    container: "layers",
-  });
-
-  // view.ui.add(layerList, "top-right");
-  let layerListExpand = new Expand({
-    expandIcon: "clipboard",
-    view: view,
-    expanded: false,
-    content: layerList,
-  });
-
-  let legendExpand = new Expand({
-    expandIcon: "legend-right",
-    view: view,
-    expandTooltip: "Legend",
-    expanded: true,
-    label: "Legend",
-    content: legend,
-  });
-
-  view.ui.add(layerListExpand, "top-right");
-  view.ui.add(legendExpand, "bottom-right");
 
   //Labels
   const trailName = new LabelClass({
@@ -272,30 +242,43 @@ require([
   }
 
   //Widgets
+  // Legend
+  let legend = new Legend({
+    view: view,
+    container: "legend-container",
+  });
+
+  // Widget
+  let layerList = new LayerList({
+    view: view,
+    container: "layer-container",
+  });
+
   const bookmarks = new Bookmarks({
     view,
-    container: "bookmarks",
+    container: "bookmarks-container",
   });
   const print = new Print({
-    view: view,
-    container: "print",
-    printServiceUrl: "https://www.example.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+    view,
+    container: "print-container",
   });
 
-  // for calcite
-  const myView = document.getElementById("myView");
+  //////// for calcite Practice
 
-  myView.addEventListener("arcgisViewReadyChange", (evt) => {
-    const { title, description, thumbnailUrl, avgRating } =
-    myView.map.portalItem;
-    document.querySelector("#header-title").heading = title;
-    document.querySelector("#item-description").innerHTML = description;
-    document.querySelector("#item-thumbnail").src = thumbnailUrl;
-    document.querySelector("#item-rating").value = avgRating;
+  view.when(function () {
+    myView.addEventListener("arcgisViewReadyChange", (evt) => {
+      // const { title, description, thumbnailUrl, avgRating } =myView.map.portalItem;
+      document.querySelector("#header-title").heading =
+        "My Best Practice Web GIS";
+      document.querySelector("#item-description").innerHTML =
+        "This is my 6/21/2025 practice of webMaps";
+      document.querySelector("#item-thumbnail").src = map.basemap.thumbnailUrl;
+      document.querySelector("#item-rating").value = 4.77;
 
-    myView.view.padding = {
-      left: 49,
-    };
+      myView.view.padding = {
+        left: 49,
+      };
+    });
   });
 
   let activeWidget;
@@ -320,9 +303,24 @@ require([
       activeWidget = null;
     }
   };
-  // added
-  document.querySelector("calcite-action-bar").addEventListener("click", handleActionBarClick);
 
+  document
+    .querySelector("calcite-action-bar")
+    .addEventListener("click", handleActionBarClick);
+
+  /////////////////////////////
+
+  let actionBarExpanded = false;
+
+  document.addEventListener("calciteActionBarToggle", (event) => {
+    actionBarExpanded = !actionBarExpanded;
+    view.padding = {
+      left: actionBarExpanded ? 135 : 49,
+    };
+  });
+
+  document.querySelector("calcite-shell").hidden = false;
+  document.querySelector("calcite-loader").hidden = true;
 
   // Panel interaction
   const panelEls = document.querySelectorAll("calcite-panel");
