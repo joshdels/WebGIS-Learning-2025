@@ -15,8 +15,7 @@ require([
   "esri/layers/GraphicsLayer",
   "esri/geometry/operators/intersectionOperator",
   "esri/widgets/Bookmarks",
-  "esri/widgets/BasemapGallery",
-  "esri/widgets/Print"
+  "esri/widgets/Print",
 ], function (
   esriConfig,
   Map,
@@ -34,7 +33,6 @@ require([
   GraphicsLayer,
   intersectionOperator,
   Bookmarks,
-  BasemapGallery,
   Print
 ) {
   //API
@@ -140,19 +138,21 @@ require([
     center: [-118.80543, 34.027],
     zoom: 13,
     padding: {
-      left: 49
-    }
+      left: 49,
+    },
   });
 
   // Legend
   let legend = new Legend({
     view: view,
+    container: "legend",
   });
   // view.ui.add(legend, "bottom-right");
 
   // Widget
   let layerList = new LayerList({
     view: view,
+    container: "layers",
   });
 
   // view.ui.add(layerList, "top-right");
@@ -271,21 +271,68 @@ require([
     featureTablePH.innerHTML = table;
   }
 
-  // Widgets
-  const basemaps = new BasemapGallery({
-    view,
-    container: "basemaps-container"
-  });
+  //Widgets
   const bookmarks = new Bookmarks({
     view,
-    container: "bookmarks-container"
+    container: "bookmarks",
   });
   const print = new Print({
-    view,
-    container: "print-container"
+    view: view,
+    container: "print",
+    printServiceUrl: "https://www.example.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
   });
 
+  // for calcite
+  const myView = document.getElementById("myView");
 
+  myView.addEventListener("arcgisViewReadyChange", (evt) => {
+    const { title, description, thumbnailUrl, avgRating } =
+    myView.map.portalItem;
+    document.querySelector("#header-title").heading = title;
+    document.querySelector("#item-description").innerHTML = description;
+    document.querySelector("#item-thumbnail").src = thumbnailUrl;
+    document.querySelector("#item-rating").value = avgRating;
+
+    myView.view.padding = {
+      left: 49,
+    };
+  });
+
+  let activeWidget;
+
+  const handleActionBarClick = ({ target }) => {
+    if (target.tagName !== "CALCITE-ACTION") {
+      return;
+    }
+
+    if (activeWidget) {
+      document.querySelector(`[data-action-id=${activeWidget}]`).active = false;
+      document.querySelector(`[data-panel-id=${activeWidget}]`).closed = true;
+    }
+
+    const nextWidget = target.dataset.actionId;
+    if (nextWidget !== activeWidget) {
+      document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
+      document.querySelector(`[data-panel-id=${nextWidget}]`).closed = false;
+      activeWidget = nextWidget;
+      document.querySelector(`[data-panel-id=${nextWidget}]`).setFocus();
+    } else {
+      activeWidget = null;
+    }
+  };
+  // added
+  document.querySelector("calcite-action-bar").addEventListener("click", handleActionBarClick);
+
+
+  // Panel interaction
+  const panelEls = document.querySelectorAll("calcite-panel");
+  for (let i = 0; i < panelEls.length; i++) {
+    panelEls[i].addEventListener("calcitePanelClose", () => {
+      document.querySelector(`[data-action-id=${activeWidget}]`).active = false;
+      document.querySelector(`[data-action-id=${activeWidget}]`).setFocus();
+      activeWidget = null;
+    });
+  }
 
   let queryExpand = new Expand({
     expandIconClass: "table",
@@ -375,11 +422,4 @@ require([
   });
 
   view.ui.add(sketch, "top-right");
-
-  //Spatial Relationships
-
-  // const contains = containsOperator.execute(graphicsLayer, squareInside);
-  // if (contains) {
-  //   console.log("The outer square contains the inner square.");
-  // }
 });

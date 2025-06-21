@@ -21,30 +21,72 @@
       src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"
     ></script>
   </head>
+
   <body>
     <calcite-shell content-behind>
       <calcite-navigation slot="header">
-        <calcite-navigation-logo 
-          id="header-title" 
-          heading="My WebGIS"
-          heading-level="1" 
-          slot="logo" >
-          <!-- Dynamically populated -->
+        <calcite-navigation-logo id="header-title" heading="My WebGIS" heading-level="1" slot="logo" >
         </calcite-navigation-logo>
       </calcite-navigation>
 
       <calcite-shell-panel slot="panel-start" display-mode="float-content">
-      </calcite-shell-panel>
+        <calcite-action-bar slot="action-bar">
+          <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
+          <calcite-action data-action-id="basemaps" icon="basemap" text="Basemaps"></calcite-action>
+          <calcite-action data-action-id="legend" icon="legend" text="Legend"></calcite-action>
+          <calcite-action data-action-id="bookmarks" icon="bookmark" text="Bookmarks"></calcite-action>
+          <calcite-action data-action-id="print" icon="print" text="Print"></calcite-action>
+          <calcite-action data-action-id="information" icon="information" text="Information"></calcite-action>
+        </calcite-action-bar>
 
+        <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
+        <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" closed closable>
+          <arcgis-layer-list drag-enabled reference-element="myView" visibility-appearance="checkbox"></arcgis-layer-list>
+        </calcite-panel>
+        <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" closed closable>
+          <arcgis-basemap-gallery reference-element="myView"></arcgis-basemap-gallery state="enabled">
+        </calcite-panel>
+        <calcite-panel heading="Legend" height-scale="l" data-panel-id="legend" closed closable>
+          <arcgis-legend legend-style="classic" reference-element="myView"></arcgis-legend>
+        </calcite-panel>
+        <calcite-panel heading="Bookmarks" height-scale="l" data-panel-id="bookmarks" closed closable >
+          <arcgis-bookmarks editing-enabled="false" reference-element="myView"></arcgis-bookmarks>
+        </calcite-panel>
+        <calcite-panel heading="Print" height-scale="l" data-panel-id="print" closed closable>
+          <arcgis-print allowed-formats="all" allowed-layouts="all" include-default-templates="false"
+            reference-element="myView"></arcgis-print>
+        </calcite-panel>
+        <!-- Info panel (populates with info from the web map) -->
+        <calcite-panel heading="Details" data-panel-id="information" closed closable>
+          <div id="info-content">
+            <img id="item-thumbnail" alt="webmap thumbnail" />
+            <div id="item-description">
+              <!-- Dynamically populated -->
+            </div>
+            <calcite-label layout="inline">
+              <b>Rating:</b>
+              <calcite-rating id="item-rating" read-only>
+                <!-- Dynamically populated -->
+              </calcite-rating>
+            </calcite-label>
+          </div>
+        </calcite-panel>
+
+      </calcite-shell-panel>
+  
       <div id="myView"></div>
       <div id="featureTablePH"></div>
+      <div id="query">
+        <input value="Type = 'Local Park'" type="text" id="whereClause" /> <br />
+        <button id="queryButton">Query Features</button>
+        <button id="clearButton">clear</button>
+      </div>
+
     </calcite-shell>
 
-    <div id="query">
-      <input value="Type = 'Local Park'" type="text" id="whereClause" /> <br />
-      <button id="queryButton">Query Features</button>
-      <button id="clearButton">clear</button>
-    </div>
+    
+
+
     <script src="app.js"></script>
   </body>
 </html>
