@@ -16,6 +16,8 @@ require([
   "esri/geometry/operators/intersectionOperator",
   "esri/widgets/Bookmarks",
   "esri/widgets/Print",
+  "esri/widgets/BasemapLayerList",
+  "esri/rest/support/StatisticDefinition"
 ], function (
   esriConfig,
   Map,
@@ -33,7 +35,9 @@ require([
   GraphicsLayer,
   intersectionOperator,
   Bookmarks,
-  Print
+  Print,
+  BasemapLayerList,
+  StatisticDefinition
 ) {
   //API
   esriConfig.apiKey =
@@ -146,8 +150,6 @@ require([
   });
 
 
-
-
   //Labels
   const trailName = new LabelClass({
     labelExpressionInfo: { expression: "$feature.TRL_NAME" },
@@ -165,6 +167,7 @@ require([
   document.getElementById("queryButton").addEventListener("click", function () {
     let currentWhere = document.getElementById("whereClause").value;
     queryFeatureLayer(currentWhere);
+    queryFeatureLayerCount(currentWhere);
 
     //height adjuster of the query
     let myViewElement = document.getElementById("myView");
@@ -184,8 +187,45 @@ require([
     view.graphics.removeAll();
   });
 
+  // // Query Section
+  // function queryFeatureLayerCount(whereClause) {
+  //   const query = new Query();
+  //   query.where = whereClause;
+  //   query.outSpatialReference = { wkid: 102100 };
+  //   query.outFields = ["*"];
+
+  //   let statisticDefinition = new StatisticDefinition({
+  //     statisticType: "count",
+  //     onStatisticField: "AGNCY_TYP",
+  //     outStatisticFieldName: "AGNCY_TYP_COUNT"
+  //   });
+
+  //   query.outStatistics = [ statisticDefinition ];
+  //   query.groupByFieldsForStatistics = ["AGNCY_TYP"];
+
+  //   parksLayer.queryFeatures(query).then(function (response) {
+  //   let xValues = [];
+  //   let yValues = []
+  //   for (let i=0; i <response.features.length; i++){
+  //     let cf = response.features[i]
+  //     xValues.push(cf.attributes["AGCY_TYP"])
+  //     yValues.push(cf.attributes["AGCY_TYP_COUNT"])
+  //   }
+
+  //   new Chart("viewChart", {
+  //     type: "bar",
+  //     data: {
+  //       labels: xValues,
+  //       datasets: [{
+  //         backgroundColor: barColors,
+  //         data: yValues,
+  //       }] 
+  //     },
+  //   });
+  //   });
+  // }
+
   function queryFeatureLayer(whereClause) {
-    //// Query
     const query = new Query();
     query.where = whereClause;
     query.outSpatialReference = { wkid: 102100 };
@@ -257,6 +297,12 @@ require([
     container: "layer-container",
   });
 
+  let basemapList = new BasemapLayerList({
+    view: view,
+    container: "basemap-container",
+    visibilityAppearance: "checkbox",
+  });
+
   const bookmarks = new Bookmarks({
     view,
     container: "bookmarks-container",
@@ -269,7 +315,7 @@ require([
   //////// for calcite Practice
   const myView = document.getElementById("myView");
 
-  myView.addEventListener("arcgisViewReadyChange", (evt) => {
+  view.when(() => {
     // const { title, description, thumbnailUrl, avgRating } =myView.map.portalItem;
     document.querySelector("#header-title").heading = "My Best Practice Web GIS";
     document.querySelector("#item-description").innerHTML = "This is my 6/21/2025 practice of webMaps";
@@ -332,13 +378,13 @@ require([
     });
   }
 
-  let queryExpand = new Expand({
-    expandIconClass: "table",
-    view: view,
-    expanded: false,
-    content: document.getElementById("query"),
-  });
-  view.ui.add(queryExpand, "bottom-left");
+  // let chartExpand = new Expand({
+  //   expandIconClass: "graph-bar",
+  //   view: view,
+  //   expanded: false,
+  //   content: document.getElementById("viewChart"),
+  // });
+  // view.ui.add(chartExpand, "bottom-right");
 
   //ganna review and revise this one
   function zoomToTableGeometry() {
@@ -347,7 +393,7 @@ require([
     table.addEventListener("click", function (event) {
       const row = event.target.closest("tr");
       if (row) {
-        alert("you clicked: " + row.textContent);
+        
       }
     });
   }
@@ -364,6 +410,7 @@ require([
 
   let sketch = new Sketch({
     view: view,
+    container: "spatial-analysis-container",
     layer: graphicsLayer,
     snappingOptions: {
       enabled: true,
@@ -419,5 +466,5 @@ require([
     }
   });
 
-  view.ui.add(sketch, "top-right");
+  // view.ui.add(sketch, "top-right");
 });

@@ -3,23 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ArcGIS API2</title>
-    <!-- STEP 1 -->
+    <title>My WebGIS</title>
+    
+     <!-- STYLESHEET  -->
     <link rel="stylesheet" href="styles.css" />
-
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.32/esri/themes/light/main.css"
-    />
+    <link rel="stylesheet"href="https://js.arcgis.com/4.32/esri/themes/light/main.css"/>
+    <!-- NON-MODULE SCRIPTS -->
     <script src="https://js.arcgis.com/4.32/"></script>
-    <script
-      src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js"
-      type="module"
-    ></script>
-    <script
-      type="module"
-      src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"
-    ></script>
+    <!-- script that causes error? -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <!-- MODULE SCRIPTS -->
+    <script src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js" type="module"></script>
+    <script type="module"src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"></script>
+   
   </head>
 
   <body>
@@ -33,6 +29,7 @@
 
       <calcite-shell-panel slot="panel-start" display-mode="float-content">
         <calcite-action-bar slot="action-bar">
+          <calcite-action data-action-id="query" icon="data-magnifying-glass" text="Query"></calcite-action>
           <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
           <calcite-action data-action-id="basemaps" icon="basemap" text="Basemaps"></calcite-action>
           <calcite-action data-action-id="legend" icon="legend" text="Legend"></calcite-action>
@@ -42,11 +39,23 @@
         </calcite-action-bar>
 
         <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
+        <calcite-panel heading="Query Parks" height-scale="l" data-panel-id="query" closed closable>
+          <arcgis-layer-list id="query-container" drag-enabled reference-element="myView" visibility-appearance="checkbox" center>
+            <p>1. Here you can do a query the Park Layers. Use your own where clause:</p>
+            <input value="Type = 'Local Park'" type="text" id="whereClause" /> <br />
+            <button id="queryButton">Query Features</button>
+            <button id="clearButton">clear</button>
+            <br>
+            <div id="spatial-analysis-container">
+              <p>2. After you querried some Parks you can draw a polygon or a box to specifically see which Parks of a region</p>
+            </div>
+          </arcgis-layer-list>
+        </calcite-panel>
         <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" closed closable>
           <arcgis-layer-list id="layer-container" drag-enabled reference-element="myView" visibility-appearance="checkbox"></arcgis-layer-list>
         </calcite-panel>
         <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" closed closable>
-          <arcgis-basemap-gallery reference-element="myView"></arcgis-basemap-gallery state="enabled">
+          <div id="basemap-container" reference-element="myView"></div>
         </calcite-panel>
         <calcite-panel heading="Legend" height-scale="l" data-panel-id="legend" closed closable>
           <arcgis-legend id="legend-container" legend-style="classic" reference-element="myView"></arcgis-legend>
@@ -55,8 +64,8 @@
           <arcgis-bookmarks id="bookmarks-container" editing-enabled="false" reference-element="myView"></arcgis-bookmarks>
         </calcite-panel>
         <calcite-panel heading="Print" height-scale="l" data-panel-id="print" closed closable>
-          <arcgis-print id="print-container" allowed-formats="all" allowed-layouts="all" include-default-templates="false"
-            reference-element="myView"></arcgis-print>
+          <div id="print-container" allowed-formats="all" allowed-layouts="all" include-default-templates="false"
+            reference-element="myView"></div>
         </calcite-panel>
         <!-- Info panel (populates with info from the web map) -->
         <calcite-panel heading="Details" data-panel-id="information" closed closable>
@@ -78,13 +87,8 @@
   
       <!-- <div id="myView"></div> -->
       <arcgis-map id="myView"></arcgis-map>
-      <div id="featureTablePH"></div>
-      <div id="query">
-        <input value="Type = 'Local Park'" type="text" id="whereClause" /> <br />
-        <button id="queryButton">Query Features</button>
-        <button id="clearButton">clear</button>
-      </div>
-
+      <div id="featureTablePH"></div> 
+      <!-- <canvas id="viewChart" style="width:300px;max-width:300px"></canvas> -->
     </calcite-shell>
 
     
