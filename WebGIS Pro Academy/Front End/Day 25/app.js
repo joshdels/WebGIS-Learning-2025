@@ -187,43 +187,45 @@ require([
     view.graphics.removeAll();
   });
 
-  // // Query Section
-  // function queryFeatureLayerCount(whereClause) {
-  //   const query = new Query();
-  //   query.where = whereClause;
-  //   query.outSpatialReference = { wkid: 102100 };
-  //   query.outFields = ["*"];
+  // Query Section
+  function queryFeatureLayerCount(whereClause) {
+    const query = new Query();
+    query.where = whereClause;
+    query.outSpatialReference = { wkid: 102100 };
+    query.outFields = ["*"];
 
-  //   let statisticDefinition = new StatisticDefinition({
-  //     statisticType: "count",
-  //     onStatisticField: "AGNCY_TYP",
-  //     outStatisticFieldName: "AGNCY_TYP_COUNT"
-  //   });
+    let statisticDefinition = new StatisticDefinition({
+      statisticType: "count",
+      onStatisticField: "AGNCY_TYP",
+      outStatisticFieldName: "AGNCY_TYP_COUNT"
+    });
 
-  //   query.outStatistics = [ statisticDefinition ];
-  //   query.groupByFieldsForStatistics = ["AGNCY_TYP"];
+    query.outStatistics = [ statisticDefinition ];
+    query.groupByFieldsForStatistics = ["AGNCY_TYP"];
 
-  //   parksLayer.queryFeatures(query).then(function (response) {
-  //   let xValues = [];
-  //   let yValues = []
-  //   for (let i=0; i <response.features.length; i++){
-  //     let cf = response.features[i]
-  //     xValues.push(cf.attributes["AGCY_TYP"])
-  //     yValues.push(cf.attributes["AGCY_TYP_COUNT"])
-  //   }
+    parksLayer.queryFeatures(query).then(function (response) {
+    let xValues = [];
+    let yValues = []
+    for (let i=0; i <response.features.length; i++){
+      let cf = response.features[i]
+      xValues.push(cf.attributes["AGCY_TYP"])
+      yValues.push(cf.attributes["AGCY_TYP_COUNT"])
+    }
 
-  //   new Chart("viewChart", {
-  //     type: "bar",
-  //     data: {
-  //       labels: xValues,
-  //       datasets: [{
-  //         backgroundColor: barColors,
-  //         data: yValues,
-  //       }] 
-  //     },
-  //   });
-  //   });
-  // }
+    const chart = document.getElementById("viewChart");
+    
+    new Chart(chart, {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues,
+        }] 
+      },
+    });
+    });
+  }
 
   function queryFeatureLayer(whereClause) {
     const query = new Query();
