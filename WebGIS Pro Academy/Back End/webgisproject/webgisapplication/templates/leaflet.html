@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaflet Map - Philippines with Popups</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Philippines Map with Popups</h2>
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  // Initialize the map centered on the Philippines
+  var map = L.map('map').setView([12.8797, 121.7740], 6);
+
+  // Add OpenStreetMap tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // List of locations with popup content
+  const locations = [
+    {
+      name: "Manila",
+      coords: [14.5995, 120.9842],
+      description: "The capital city of the Philippines, known for its historic sites and cultural heritage."
+    },
+    {
+      name: "Cebu City",
+      coords: [10.3157, 123.8854],
+      description: "A bustling city in the Visayas, famous for the Sinulog Festival and beautiful beaches."
+    },
+    {
+      name: "Davao City",
+      coords: [7.1907, 125.4553],
+      description: "The largest city in Mindanao, home of Mount Apo and durian fruit."
+    },
+    {
+      name: "Baguio",
+      coords: [16.4023, 120.5960],
+      description: "A mountain city known as the Summer Capital of the Philippines."
+    },
+    {
+      name: "Zamboanga City",
+      coords: [6.9214, 122.0790],
+      description: "A southern city with a unique mix of cultures and the famous pink sand beach on Sta. Cruz Island."
+    }
+  ];
+
+  // Add markers with popups
+  locations.forEach(function(location) {
+    L.marker(location.coords)
+      .addTo(map)
+      .bindPopup(`<strong>${location.name}</strong><br>${location.description}`);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My WebGIS</title>
+    
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet"href="https://js.arcgis.com/4.32/esri/themes/light/main.css"/>
+    <script src="https://js.arcgis.com/4.32/"></script>
+    <script src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js" type="module"></script>
+    <script type="module"src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"></script>
+
+
+  </head>
+
+  <body>
+    <calcite-loader></calcite-loader>
+
+    <calcite-shell content-behind hidden>
+      <calcite-navigation slot="header">
+        <calcite-navigation-logo id="header-title" heading="Covid 22" heading-level="1" slot="logo" >
+        </calcite-navigation-logo>
+      </calcite-navigation>
+
+      <calcite-shell-panel slot="panel-start" display-mode="float-content">
+        <calcite-action-bar slot="action-bar">
+          <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
+          <calcite-action data-action-id="legend" icon="legend" text="Legend"></calcite-action>
+          <calcite-action data-action-id="information" icon="information" text="Information"></calcite-action>
+        </calcite-action-bar>
+
+        <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
+        <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" closed closable>
+          <arcgis-layer-list id="layer-container" drag-enabled reference-element="myView" visibility-appearance="checkbox"></arcgis-layer-list>
+        </calcite-panel>
+        <calcite-panel heading="Legend" height-scale="l" data-panel-id="legend" closed closable>
+          <arcgis-legend id="legend-container" legend-style="classic" reference-element="myView"></arcgis-legend>
+        </calcite-panel>
+
+        <!-- Info panel (populates with info from the web map) -->
+        <calcite-panel heading="Details" data-panel-id="information" closed closable>
+          <div id="info-content">
+            <img id="item-thumbnail" alt="webmap thumbnail" />
+            <div id="item-description">
+              <!-- Dynamically populated -->
+            </div>
+            <calcite-label layout="inline">
+              <b>Rating:</b>
+              <calcite-rating id="item-rating" read-only>
+                <!-- Dynamically populated -->
+              </calcite-rating>
+            </calcite-label>
+          </div>
+        </calcite-panel>
+
+      </calcite-shell-panel>
+  
+      <arcgis-map id="myView"></arcgis-map>
+  
+
+
+    </calcite-shell>
+
+    
+
+
+    <script src="app.js"></script>
+  </body>
+</html>
