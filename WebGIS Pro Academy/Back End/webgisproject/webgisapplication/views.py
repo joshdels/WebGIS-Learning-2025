@@ -15,7 +15,7 @@ def leafletPage(request):
   return HttpResponse(template.render())
 
 def airports_data(request):
-  gdf = gpd.read_file('data/World_Airports/world_airports_wm.shp')
+  gdf = gpd.read_file('webgisapplication/data/World_Airports')
   gdf_large = gdf[gdf['type'] == 'large_airport']
   json_data = gdf_large.to_json()
   return HttpResponse(json_data, content_type='application/json')

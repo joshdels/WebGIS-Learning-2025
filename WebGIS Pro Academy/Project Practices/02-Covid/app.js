@@ -2,23 +2,15 @@ require([
   "esri/config",
   "esri/Map",
   "esri/views/MapView",
-  "esri/layers/FeatureLayer",
-  "esri/symbols/PictureMarkerSymbol",
   "esri/PopupTemplate",
   "esri/widgets/Legend",
-  "esri/widgets/LayerList",
-  "esri/layers/support/LabelClass",
    "esri/layers/GeoJSONLayer",
 ], function (
   esriConfig,
   Map,
   MapView,
-  FeatureLayer,
-  PictureMarkerSymbol,
   PopupTemplate,
   Legend,
-  LayerList,
-  LabelClass,
   GeoJSONLayer
 ) {
   //API
@@ -32,29 +24,57 @@ require([
  
 
   // Renderer
-  let trailheadsSymbol = new PictureMarkerSymbol({
-    url: "http://static.arcgis.com/images/Symbols/NPS/npsPictograph_0231b.png",
-    width: "18px",
-    height: "18px",
-  });
 
-  const trailheadsRenderer = {
+  const layerRenderer = {
     type: "simple",
-    symbol: trailheadsSymbol,
+    symbol: {
+      type: "simple-marker",
+      size: 6,
+      color: "red",
+      outline: {
+        color: "black",
+        width: 0.5
+      }
+    }
   };
-
 
   //// DATA
   // trailheads
   //Data
   const layer = new GeoJSONLayer({
+    title: "Covid Count",
     url: "covid_2023_07_23.geojson",
-    renderer: trailheadsRenderer,
-    opacity: 0.7,
+    renderer: layerRenderer,
+    opacity: 1,
   });
+
+  layer.featureReduction = {
+    type: "cluster",
+    clusterMinSize: 16,
+    // defines the label within each cluster
+    labelingInfo: [
+      {
+        deconflictionStrategy: "none",
+        labelExpressionInfo: {
+          expression: "Text($feature.cluster_count, '####')"
+        },
+        symbol: {
+          type: "text",
+          color: "white",
+          font: {
+            family: "Noto Sans",
+            size: "12px",
+            weight: "bold"
+          }
+        },
+        labelPlacement: "center-center"
+      }
+    ],
+  }
 
 
   map.add(layer);
+
 
   //View
   const view = new MapView({
@@ -75,12 +95,11 @@ require([
     container: "legend-container",
   });
 
-  // Widget
-  let layerList = new LayerList({
-    view: view,
-    container: "layer-container",
+  layer.when(() => {
+    if (layer.fullExtent) {
+      view.goTo(layer.fullExtent);
+    }
   });
-
 
   //////// For Calcite Functionality 
   const myView = document.getElementById("myView");
