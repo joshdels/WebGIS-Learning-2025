@@ -1,56 +1,25 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Leaflet Map - Philippines with Popups</title>
+  <title>Map of Airports</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-  <style>
-    #map {
-      height: 600px;
-      width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  
 </head>
 <body>
+  
+  <h2>Philippines Map with Popups</h2>
+  <div id="map"></div>
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="{% static 'js/app.js' %}"></script>
 
-<h2>Philippines Map with Popups</h2>
-<div id="map"></div>
-
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-  // Initialize the map centered on the Philippines
-  var map = L.map('map').setView([0, 0], 6);
-
-  // Add OpenStreetMap tile layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
-
-  // Add GeoJSON data to the map
-  fetch('http://127.0.0.1:8000/get_airports/')
-    .then(response => response.json())
-    .then(geoJsonData=>  {
-      let myAirports = L.geoJSON(geoJsonData, {
-        onEachFeature: function (feature, layer) {
-          layer.bindPopup("<strong>" + feature.properties.name + "</strong><br>" + feature.properties.type)}
-        }).addTo(map);
-        
-        //Zoom to features
-        map.fitBounds(myAirports.getBounds());
-      });
-
-
-
- 
-
-
-</script>
 
 </body>
 </html>

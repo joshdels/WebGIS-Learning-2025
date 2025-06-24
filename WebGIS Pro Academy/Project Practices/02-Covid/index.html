@@ -10,6 +10,9 @@
     <script src="https://js.arcgis.com/4.32/"></script>
     <script src="https://js.arcgis.com/calcite-components/3.2.1/calcite.esm.js" type="module"></script>
     <script type="module"src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"></script>
+    <!-- <script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script> -->
 
   </head>
 
@@ -45,6 +48,16 @@
         </calcite-panel>
         <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
         <calcite-panel heading="Legend" height-scale="l" data-panel-id="legend" closed closable>
+          <calcite-label>
+            <p>Choiose</p>
+          <calcite-select>
+              <calcite-option value="mountains">Mountains</calcite-option>
+              <calcite-option value="rivers">Rivers</calcite-option>
+              <calcite-option value="lakes">Lakes</calcite-option>
+              <calcite-option value="buttes">Buttes</calcite-option>
+              <calcite-option value="fjords">Fjords</calcite-option>
+              </calcite-select>
+          </calcite-label>
           <arcgis-legend id="legend-container" legend-style="classic" reference-element="myView"></arcgis-legend>
         </calcite-panel>
 
