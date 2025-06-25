@@ -8,7 +8,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 // Add GeoJSON data to the map
-fetch("http://127.0.0.1:8000/airports_data/?type=balloonport")
+fetch("http://127.0.0.1:8000/getairportspostgis")
   .then((response) => response.json())
   .then((geoJsonData) => {
     let myAirports = L.geoJSON(geoJsonData, {
