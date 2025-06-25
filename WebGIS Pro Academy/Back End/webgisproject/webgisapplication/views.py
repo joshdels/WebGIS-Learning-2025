@@ -21,4 +21,3 @@ def airports_data(request):
   json_data = gdf_large.to_json()
   return HttpResponse(json_data, content_type='application/json')
 
-# 'large_airport'
