@@ -1,0 +1,11 @@
+id,name,type,latitude,longitude
+1,New York,Metropolitan,40.7128,-74.0060
+2,Los Angeles,Metropolitan,34.0522,-118.2437
+3,Tokyo,Megacity,35.6895,139.6917
+4,London,Capital,51.5074,-0.1278
+5,Paris,Capital,48.8566,2.3522
+6,Sydney,Coastal, -33.8688,151.2093
+7,São Paulo,Megacity,-23.5505,-46.6333
+8,Cape Town,Coastal,-33.9249,18.4241
+9,Mumbai,Megacity,19.0760,72.8777
+10,Berlin,Capital,52.5200,13.4050
