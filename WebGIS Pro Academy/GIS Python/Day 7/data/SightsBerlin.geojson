@@ -1,0 +1,115 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brandenburg Gate",
+        "category": "Landmark"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3777, 52.5163]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Reichstag Building",
+        "category": "Government"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3761, 52.5186]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Museum Island",
+        "category": "Museum"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3987, 52.5167]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Berlin Wall Memorial",
+        "category": "Historical"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3889, 52.5351]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Checkpoint Charlie",
+        "category": "Historical"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3903, 52.5074]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Potsdamer Platz",
+        "category": "Public Square"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3762, 52.5094]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gendarmenmarkt",
+        "category": "Public Square"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3936, 52.5139]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Berlin Cathedral",
+        "category": "Religious"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.4049, 52.5186]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Charlottenburg Palace",
+        "category": "Historical"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.2959, 52.5206]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tiergarten Park",
+        "category": "Park"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3419, 52.5144]
+      }
+    }
+  ]
+}
