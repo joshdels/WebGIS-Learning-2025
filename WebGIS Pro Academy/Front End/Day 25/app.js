@@ -219,13 +219,15 @@ require([
       data: {
         labels: xValues,
         datasets: [{
-          backgroundColor: barColors,
+          backgroundColor:  ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
           data: yValues,
         }] 
       },
     });
     });
+    
   }
+
 
   function queryFeatureLayer(whereClause) {
     const query = new Query();
@@ -380,13 +382,7 @@ require([
     });
   }
 
-  // let chartExpand = new Expand({
-  //   expandIconClass: "graph-bar",
-  //   view: view,
-  //   expanded: false,
-  //   content: document.getElementById("viewChart"),
-  // });
-  // view.ui.add(chartExpand, "bottom-right");
+
 
   //ganna review and revise this one
   function zoomToTableGeometry() {

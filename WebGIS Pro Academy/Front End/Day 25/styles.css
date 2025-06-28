@@ -9,6 +9,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: flex;
+  flex: 1;
 }
 
 /* .esri-widget--panel{
@@ -20,9 +21,39 @@ html, body {
   padding: 20px;
 }
 
+
+/* for calcite */
+body {
+  display: flex;
+}
+
+calcite-loader {
+  align-self: center;
+  justify-self: center;
+}
+
+#info-content {
+  padding: 0.75rem;
+}
+
+calcite-rating {
+  margin-top: 0.25rem;
+}
+
+#viewChart {
+  position: absolute; 
+  background: white;
+  width: 400px;
+  height: 200px;
+  top: 10px;
+  right: 20px;
+}
+
 #featureTable {
+  position: absolute;
   width: 200px;
-  overflow-x: scroll;
+  max-height: 3000px;
+  overflow: auto;
   box-sizing: border-box;
 }
 
@@ -42,22 +73,4 @@ tr:nth-child(even){background-color: #f2f2f2}
 th {
   background-color: #049faa;
   color: white;
-}
-
-/* for calcite */
-body {
-  display: flex;
-}
-
-calcite-loader {
-  align-self: center;
-  justify-self: center;
-}
-
-#info-content {
-  padding: 0.75rem;
-}
-
-calcite-rating {
-  margin-top: 0.25rem;
 }
