@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"
+    />
+
+    <meta
+      name="viewport"
+      content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <style>
+      #map_22ddd603d17ececfc8cf58d81cd244d8 {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        left: 0%;
+        top: 0%;
+      }
+      .leaflet-container {
+        font-size: 1rem;
+      }
+    </style>
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+    <style>
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+      }
+    </style>
+
+    <script>
+      L_NO_TOUCH = false;
+      L_DISABLE_3D = false;
+    </script>
+
+    <style>
+      .foliumtooltip {
+      }
+      .foliumtooltip table {
+        margin: auto;
+      }
+      .foliumtooltip tr {
+        text-align: left;
+      }
+      .foliumtooltip th {
+        padding: 2px;
+        padding-right: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="folium-map" id="map_22ddd603d17ececfc8cf58d81cd244d8"></div>
+  </body>
+  <script>
+    var map_22ddd603d17ececfc8cf58d81cd244d8 = L.map(
+      "map_22ddd603d17ececfc8cf58d81cd244d8",
+      {
+        center: [52.521249999999995, 13.3504],
+        crs: L.CRS.EPSG3857,
+        ...{
+          zoom: 10,
+          zoomControl: true,
+          preferCanvas: false,
+        },
+      }
+    );
+    L.control.scale().addTo(map_22ddd603d17ececfc8cf58d81cd244d8);
+
+    var tile_layer_e223c13c12c047d45d0597a214b22d45 = L.tileLayer(
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        minZoom: 0,
+        maxZoom: 19,
+        maxNativeZoom: 19,
+        noWrap: false,
+        attribution:
+          '\u0026copy; \u003ca href="https://www.openstreetmap.org/copyright"\u003eOpenStreetMap\u003c/a\u003e contributors',
+        subdomains: "abc",
+        detectRetina: false,
+        tms: false,
+        opacity: 1,
+      }
+    );
+
+    tile_layer_e223c13c12c047d45d0597a214b22d45.addTo(
+      map_22ddd603d17ececfc8cf58d81cd244d8
+    );
+
+    map_22ddd603d17ececfc8cf58d81cd244d8.fitBounds(
+      [
+        [52.50739999999999, 13.295900000000001],
+        [52.53510000000001, 13.4049],
+      ],
+      {}
+    );
+
+    function geo_json_b717eb0900409bf8515d67581d14170f_styler(feature) {
+      switch (feature.id) {
+        case "0":
+          return {
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        case "1":
+          return {
+            color: "#dbdb8d",
+            fillColor: "#dbdb8d",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        case "2":
+          return {
+            color: "#f7b6d2",
+            fillColor: "#f7b6d2",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        case "3":
+          return {
+            color: "#ff7f0e",
+            fillColor: "#ff7f0e",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        case "4":
+          return {
+            color: "#9467bd",
+            fillColor: "#9467bd",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        case "5":
+          return {
+            color: "#c7c7c7",
+            fillColor: "#c7c7c7",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        case "6":
+          return {
+            color: "#c49c94",
+            fillColor: "#c49c94",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        case "7":
+          return {
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        case "8":
+          return {
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+        default:
+          return {
+            color: "#9edae5",
+            fillColor: "#9edae5",
+            fillOpacity: 0.5,
+            weight: 10,
+          };
+      }
+    }
+    function geo_json_b717eb0900409bf8515d67581d14170f_highlighter(feature) {
+      switch (feature.id) {
+        default:
+          return { fillOpacity: 0.75 };
+      }
+    }
+    function geo_json_b717eb0900409bf8515d67581d14170f_pointToLayer(
+      feature,
+      latlng
+    ) {
+      var opts = {
+        stroke: true,
+        color: "#3388ff",
+        weight: 10,
+        opacity: 1.0,
+        lineCap: "round",
+        lineJoin: "round",
+        dashArray: null,
+        dashOffset: null,
+        fill: true,
+        fillColor: "#3388ff",
+        fillOpacity: 0.2,
+        fillRule: "evenodd",
+        bubblingMouseEvents: true,
+        radius: 10,
+      };
+
+      let style = geo_json_b717eb0900409bf8515d67581d14170f_styler(feature);
+      Object.assign(opts, style);
+
+      return new L.CircleMarker(latlng, opts);
+    }
+
+    function geo_json_b717eb0900409bf8515d67581d14170f_onEachFeature(
+      feature,
+      layer
+    ) {
+      layer.on({
+        mouseout: function (e) {
+          if (typeof e.target.setStyle === "function") {
+            geo_json_b717eb0900409bf8515d67581d14170f.resetStyle(e.target);
+          }
+        },
+        mouseover: function (e) {
+          if (typeof e.target.setStyle === "function") {
+            const highlightStyle =
+              geo_json_b717eb0900409bf8515d67581d14170f_highlighter(
+                e.target.feature
+              );
+            e.target.setStyle(highlightStyle);
+          }
+        },
+      });
+    }
+    var geo_json_b717eb0900409bf8515d67581d14170f = L.geoJson(null, {
+      onEachFeature: geo_json_b717eb0900409bf8515d67581d14170f_onEachFeature,
+
+      style: geo_json_b717eb0900409bf8515d67581d14170f_styler,
+      pointToLayer: geo_json_b717eb0900409bf8515d67581d14170f_pointToLayer,
+      ...{},
+    });
+
+    function geo_json_b717eb0900409bf8515d67581d14170f_add(data) {
+      geo_json_b717eb0900409bf8515d67581d14170f.addData(data);
+    }
+    geo_json_b717eb0900409bf8515d67581d14170f_add({
+      bbox: [13.295900000000001, 52.50739999999999, 13.4049, 52.53510000000001],
+      features: [
+        {
+          bbox: [13.3777, 52.5163, 13.3777, 52.5163],
+          geometry: { coordinates: [13.3777, 52.5163], type: "Point" },
+          id: "0",
+          properties: {
+            __folium_color: "#2ca02c",
+            category: "Landmark",
+            name: "Brandenburg Gate",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [13.3761, 52.518600000000006, 13.3761, 52.518600000000006],
+          geometry: {
+            coordinates: [13.3761, 52.518600000000006],
+            type: "Point",
+          },
+          id: "1",
+          properties: {
+            __folium_color: "#dbdb8d",
+            category: "Government",
+            name: "Reichstag Building",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [13.3987, 52.51669999999999, 13.3987, 52.51669999999999],
+          geometry: {
+            coordinates: [13.3987, 52.51669999999999],
+            type: "Point",
+          },
+          id: "2",
+          properties: {
+            __folium_color: "#f7b6d2",
+            category: "Museum",
+            name: "Museum Island",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [13.3889, 52.53510000000001, 13.3889, 52.53510000000001],
+          geometry: {
+            coordinates: [13.3889, 52.53510000000001],
+            type: "Point",
+          },
+          id: "3",
+          properties: {
+            __folium_color: "#ff7f0e",
+            category: "Historical",
+            name: "Berlin Wall Memorial",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [13.3903, 52.50739999999999, 13.3903, 52.50739999999999],
+          geometry: {
+            coordinates: [13.3903, 52.50739999999999],
+            type: "Point",
+          },
+          id: "4",
+          properties: {
+            __folium_color: "#9467bd",
+            category: "Historical",
+            name: "Checkpoint Charlie",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [13.376200000000003, 52.5094, 13.376200000000003, 52.5094],
+          geometry: {
+            coordinates: [13.376200000000003, 52.5094],
+            type: "Point",
+          },
+          id: "5",
+          properties: {
+            __folium_color: "#c7c7c7",
+            category: "Public Square",
+            name: "Potsdamer Platz",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [
+            13.393600000000001, 52.51389999999999, 13.393600000000001,
+            52.51389999999999,
+          ],
+          geometry: {
+            coordinates: [13.393600000000001, 52.51389999999999],
+            type: "Point",
+          },
+          id: "6",
+          properties: {
+            __folium_color: "#c49c94",
+            category: "Public Square",
+            name: "Gendarmenmarkt",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [13.4049, 52.51859999999999, 13.4049, 52.51859999999999],
+          geometry: {
+            coordinates: [13.4049, 52.51859999999999],
+            type: "Point",
+          },
+          id: "7",
+          properties: {
+            __folium_color: "#1f77b4",
+            category: "Religious",
+            name: "Berlin Cathedral",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [
+            13.295900000000001, 52.520599999999995, 13.295900000000001,
+            52.520599999999995,
+          ],
+          geometry: {
+            coordinates: [13.295900000000001, 52.520599999999995],
+            type: "Point",
+          },
+          id: "8",
+          properties: {
+            __folium_color: "#d62728",
+            category: "Historical",
+            name: "Charlottenburg Palace",
+          },
+          type: "Feature",
+        },
+        {
+          bbox: [
+            13.341900000000003, 52.51439999999999, 13.341900000000003,
+            52.51439999999999,
+          ],
+          geometry: {
+            coordinates: [13.341900000000003, 52.51439999999999],
+            type: "Point",
+          },
+          id: "9",
+          properties: {
+            __folium_color: "#9edae5",
+            category: "Park",
+            name: "Tiergarten Park",
+          },
+          type: "Feature",
+        },
+      ],
+      type: "FeatureCollection",
+    });
+
+    geo_json_b717eb0900409bf8515d67581d14170f.bindTooltip(
+      function (layer) {
+        let div = L.DomUtil.create("div");
+
+        let handleObject = (feature) => {
+          if (feature === null) {
+            return "";
+          } else if (typeof feature == "object") {
+            return JSON.stringify(feature);
+          } else {
+            return feature;
+          }
+        };
+        let fields = ["name", "category"];
+        let aliases = ["name", "category"];
+        let table =
+          "<table>" +
+          String(
+            fields
+              .map(
+                (v, i) =>
+                  `<tr>
+            <th>${aliases[i]}</th>
+            
+            <td>${handleObject(layer.feature.properties[v])}</td>
+        </tr>`
+              )
+              .join("")
+          ) +
+          "</table>";
+        div.innerHTML = table;
+
+        return div;
+      },
+      {
+        sticky: true,
+        className: "foliumtooltip",
+      }
+    );
+
+    geo_json_b717eb0900409bf8515d67581d14170f.addTo(
+      map_22ddd603d17ececfc8cf58d81cd244d8
+    );
+  </script>
+</html>
