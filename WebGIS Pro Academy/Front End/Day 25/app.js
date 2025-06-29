@@ -94,8 +94,7 @@ require([
   let trailheadsPT = new PopupTemplate({
     title: "The name of trail: {TRL_NAME}",
     content:
-      "The Trail head is in the park {PARK_NAME} <br>" +
-      '<img src="https://yt3.googleusercontent.com/ytc/AIdro_lWrxG_fpbnTzQokp3OGudXc5dgZtHPFYm5LyC6kWRZT5g=s900-c-k-c0x00ffffff-no-rj" alt="dota image" style="width:200px; heigth: 200px"></img>',
+      "The Trail head is in the park {PARK_NAME} <br>"
   });
 
   let trailLinesPT = new PopupTemplate({
@@ -167,22 +166,28 @@ require([
     let currentWhere = document.getElementById("whereClause").value;
     queryFeatureLayer(currentWhere);
     queryFeatureLayerCount(currentWhere);
-    view.ui.add(chartExpand, "top-right");
-
+    
     //height adjuster of the query
     let myViewElement = document.getElementById("myView");
     let tableElement = document.getElementById("featureTablePH");
+    let chartElement = document.getElementById("viewChartContainer");
     myViewElement.style.height = "70%";
     tableElement.style.height = "30%";
     tableElement.style.display = "block";
+    chartElement.style.display = "block";
+
+
+    view.ui.add(chartExpand, "top-right");
   });
 
   //Clear button
   document.getElementById("clearButton").addEventListener("click", function () {
     let myViewElement = document.getElementById("myView");
     let tableElement = document.getElementById("featureTablePH");
+    let chartElement = document.getElementById("viewChartContainer");
     myViewElement.style.height = "100%";
     tableElement.style.display = "none";
+    chartElement.style.display = "none";
 
     view.graphics.removeAll();
     view.ui.remove(chartExpand);
@@ -336,6 +341,29 @@ require([
   const bookmarks = new Bookmarks({
     view,
     container: "bookmarks-container",
+    visibleElements: { thumbnail: true },
+
+    bookmarks: [
+      {
+        name: "test",
+        viewpoint: {
+          targetGeometry: {
+            type: "extent",
+            xmin: -13139131.948889678,
+            ymin: 4047767.23531948,
+            xmax: -13092887.54677721,
+            ymax: 4090610.189673263,
+            spatialReference: {
+              wkid: 102100,
+            },
+          },
+        },
+        thumbnail: {
+          sourceURL:
+            "https://cdn05.zipify.com/RQZYw7dLmDEk4o6MjUoZpEqKAbE=/fit-in/3840x0/3ce46b1ccb124af29d7bc3744f975d5b/pot013-dec-blogs-61.jpeg",
+        },
+      },
+    ],
   });
   const print = new Print({
     view,
@@ -424,12 +452,12 @@ require([
         query.outSpatialReference = { wkid: 102100 };
         query.returnGeometry = true;
         query.outFields = ["*"];
-        
+
         parksLayer.queryFeatures(query).then(function (results) {
           let featureSet = results.features;
           target = featureSet[0].geometry.extent;
           view.goTo(target);
-          });
+        });
       }
     });
   }
