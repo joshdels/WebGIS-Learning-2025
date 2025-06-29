@@ -17,7 +17,7 @@ require([
   "esri/widgets/Bookmarks",
   "esri/widgets/Print",
   "esri/widgets/BasemapLayerList",
-  "esri/rest/support/StatisticDefinition"
+  "esri/rest/support/StatisticDefinition",
 ], function (
   esriConfig,
   Map,
@@ -50,7 +50,7 @@ require([
 
   const graphicsLayer = new GraphicsLayer({
     title: "Graphics",
-    listMode: "hide"
+    listMode: "hide",
   });
 
   // Renderer
@@ -149,7 +149,6 @@ require([
     },
   });
 
-
   //Labels
   const trailName = new LabelClass({
     labelExpressionInfo: { expression: "$feature.TRL_NAME" },
@@ -168,6 +167,7 @@ require([
     let currentWhere = document.getElementById("whereClause").value;
     queryFeatureLayer(currentWhere);
     queryFeatureLayerCount(currentWhere);
+    view.ui.add(chartExpand, "top-right");
 
     //height adjuster of the query
     let myViewElement = document.getElementById("myView");
@@ -185,6 +185,7 @@ require([
     tableElement.style.display = "none";
 
     view.graphics.removeAll();
+    view.ui.remove(chartExpand);
   });
 
   // Query Section
@@ -197,37 +198,62 @@ require([
     let statisticDefinition = new StatisticDefinition({
       statisticType: "count",
       onStatisticField: "AGNCY_TYP",
-      outStatisticFieldName: "AGNCY_TYP_COUNT"
+      outStatisticFieldName: "AGNCY_TYP_COUNT",
     });
 
-    query.outStatistics = [ statisticDefinition ];
+    query.outStatistics = [statisticDefinition];
     query.groupByFieldsForStatistics = ["AGNCY_TYP"];
 
     parksLayer.queryFeatures(query).then(function (response) {
-    let xValues = [];
-    let yValues = []
-    for (let i=0; i <response.features.length; i++){
-      let cf = response.features[i]
-      xValues.push(cf.attributes["AGCY_TYP"])
-      yValues.push(cf.attributes["AGCY_TYP_COUNT"])
-    }
+      let xValues = [];
+      let yValues = [];
 
-    const chart = document.getElementById("viewChart");
-    
-    new Chart(chart, {
-      type: "bar",
-      data: {
-        labels: xValues,
-        datasets: [{
-          backgroundColor:  ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          data: yValues,
-        }] 
-      },
+      for (let i = 0; i < response.features.length; i++) {
+        let cf = response.features[i];
+        xValues.push(cf.attributes["AGNCY_TYP"]);
+        yValues.push(cf.attributes["AGNCY_TYP_COUNT"]);
+      }
+
+      const chart = document.getElementById("viewChart");
+
+      new Chart(chart, {
+        type: "bar",
+        data: {
+          labels: xValues,
+          datasets: [
+            {
+              label: "Agency Type",
+              backgroundColor: [
+                "Red",
+                "Blue",
+                "Yellow",
+                "Green",
+                "Purple",
+                "Orange",
+                "Violet",
+                "Pink",
+                "Gray",
+              ],
+              data: yValues,
+            },
+          ],
+        },
+        options: {
+          legend: { display: false },
+          maintainAspectRatio: false,
+          title: {
+            display: true,
+            text: "Agency Type",
+          },
+        },
+      });
     });
-    });
-    
   }
-
+  const chartExpand = new Expand({
+    expandIcon: "graph-bar",
+    view: view,
+    content: document.getElementById("viewChartContainer"),
+  });
 
   function queryFeatureLayer(whereClause) {
     const query = new Query();
@@ -289,7 +315,7 @@ require([
   }
 
   //Widgets
-    // Legend
+  // Legend
   let legend = new Legend({
     view: view,
     container: "legend-container",
@@ -321,8 +347,10 @@ require([
 
   view.when(() => {
     // const { title, description, thumbnailUrl, avgRating } =myView.map.portalItem;
-    document.querySelector("#header-title").heading = "My Best Practice Web GIS";
-    document.querySelector("#item-description").innerHTML = "This is my 6/21/2025 practice of webMaps";
+    document.querySelector("#header-title").heading =
+      "My Best Practice Web GIS";
+    document.querySelector("#item-description").innerHTML =
+      "This is my 6/21/2025 practice of webMaps";
     document.querySelector("#item-thumbnail").src = map.basemap.thumbnailUrl;
     document.querySelector("#item-rating").value = 4.77;
 
@@ -358,7 +386,7 @@ require([
     .querySelector("calcite-action-bar")
     .addEventListener("click", handleActionBarClick);
 
-    /////////////////////////////
+  /////////////////////////////
 
   let actionBarExpanded = false;
 
@@ -382,16 +410,26 @@ require([
     });
   }
 
-
-
   //ganna review and revise this one
   function zoomToTableGeometry() {
     let table = document.getElementById("featureTablePH");
 
     table.addEventListener("click", function (event) {
       const row = event.target.closest("tr");
+      let index = parseInt(row.cells[0].textContent);
+
       if (row) {
+        const query = new Query();
+        query.where = `FID = ${index}`;
+        query.outSpatialReference = { wkid: 102100 };
+        query.returnGeometry = true;
+        query.outFields = ["*"];
         
+        parksLayer.queryFeatures(query).then(function (results) {
+          let featureSet = results.features;
+          target = featureSet[0].geometry.extent;
+          view.goTo(target);
+          });
       }
     });
   }
