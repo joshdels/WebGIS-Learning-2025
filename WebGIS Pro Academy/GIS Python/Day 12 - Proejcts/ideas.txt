@@ -1,0 +1,10 @@
+1. Airport Data and cities
+  large airports in each Data, small airports
+  regions
+  100km radius and which city they are landed  
+
+2. Natural Disaster Risk  Fault lines 
+  analyze the earthquake and what region is earthquake prone
+  which faultline is closest/intersect with to the populated areas
+  which fault is the highest activity
+  create a map highlighting areas at risk base on proximity to fault lines
