@@ -28,7 +28,7 @@ require([
   map.add(layer);
 
   function selectRenders(layer, select) {
-    if (select == 1) {
+    if (select == 3) {
       layer.featureReduction = {
         type: "cluster",
         clusterMinSize: 16,
