@@ -18,11 +18,20 @@ fetch(
     let geoJsonLayer = L.geoJson(data, {
       style: style,
       onEachFeature: function (feature, layer) {
-        layer.bindPopup(feature.properties.ADM1_EN);
+        layer.bindPopup(
+          "County Name: " +
+            feature.properties.ADM1_EN +
+            "<br><br>" +
+            "Total County Population:" +
+            "<br>" +
+            feature.properties.County_pop +
+            "</br><br/>" +
+            feature.properties.Pop_Density +
+            " people / km<sup>2</sup>"
+        );
 
         layer.on("mouseover", (event) => {
           let layer = event.target;
-          info.update(layer.feature.properties);
 
           layer.setStyle({
             weight: 5,
@@ -33,7 +42,6 @@ fetch(
           //adding functionality to clicking
           layer.bringToFront();
           layer.on("mouseout", function () {
-            info.update();
             geoJsonLayer.resetStyle(this);
           });
           layer.on("click", (event) => {
@@ -47,26 +55,6 @@ fetch(
   .catch((error) => {
     console.log(`This is the error: ${error}`);
   });
-
-////// STYLING PRACTICE  ////
-// // question marks acts as if else huh? theres many ways to kill the cat.
-// function getColor(d) {
-//   return d > 1400 ? '#8c2d04':
-//     d > 700 ? '#cc4c02':
-//     d > 400 ? '#ec7014':
-//     d > 100 ? '#fe9929':
-//     d > 50 ? '#fec44f':
-//     d > 25 ? '#fee391':
-//               '#ffffd4'
-// }
-// // this ist the samea above but lengthy
-// function getColor(d) {
-//   if (d > 1400) {
-//     return '#8c2d04';
-//   } else if (d > 700) {
-//     return '#cc4c02';
-//   }
-// }
 
 //use of swtich
 function getColor(d) {
@@ -100,30 +88,6 @@ let style = (feature) => {
 
 //Add Controls
 let info = L.control();
-
-info.onAdd = function (map) {
-  this.div = L.DomUtil.create("div", "info");
-  this.update();
-  return this.div;
-};
-
-info.update = function (property) {
-  this.div.innerHTML =
-    "<h4>Kenya Population Density</h4>" +
-    (property
-      ? "<b>" +
-        property.ADM1_EN +
-        "</br><br/>" +
-        "Total Population" +
-        "<br>" +
-        property.County_pop +
-        "</br><br/>" +
-        property.Pop_Density +
-        " people / km<sup>2</sup>"
-      : "Hover over the state");
-};
-
-info.addTo(map);
 
 //Legend
 let legend = L.control({ position: "bottomright" });
