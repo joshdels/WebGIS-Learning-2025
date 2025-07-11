@@ -1,17 +1,10 @@
 🌿 Intermediate Level
-GeoJSON Data
-
-Load a GeoJSON polygon (e.g., country boundary).
-Style it based on properties (e.g., population or area).
 
 Interactive Legend
 Create a dynamic legend showing categories or values.
 
 Match the legend colors to the polygon fill colors.
 Layer Control
-
-Use L.control.layers() to toggle between:
-Tile layers (basemaps)
 
 Overlay layers (e.g., schools, hospitals)
 Circle and Rectangle
@@ -20,9 +13,6 @@ Draw circles with radius and rectangles on the map.
 Bind popups to each one.
 
 🌾 Advanced Frontend Practice
-Load External GeoJSON (AJAX)
-Load .geojson from a file or URL using fetch() or leaflet-ajax.
-
 Filter Features
 Create buttons or dropdowns to filter features (e.g., only schools or only parks).
 
@@ -56,15 +46,9 @@ Map out a vertical/hydroponic garden plan.
 Interactive layers showing plant type, water needs, etc.
 
 leaflet.ajax
-
 leaflet.draw
-
 leaflet.fullscreen
-
 leaflet-minimap
-
 leaflet-heat
-
 esri-leaflet (if exploring ESRI services)
-
 leaflet-routing-machine (if practicing directions)
