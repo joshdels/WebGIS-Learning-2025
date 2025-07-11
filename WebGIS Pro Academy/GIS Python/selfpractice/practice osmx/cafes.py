@@ -1,5 +1,7 @@
 import osmnx as ox
 import matplotlib.pyplot as plt
+import geopandas as gpd
+import pandas as pd
 
 # Define a place or polygon
 place = "Manila, Philippines"
@@ -8,25 +10,32 @@ tags = {
   }
 
 #extract
-cafes = ox.features_from_place(place, tags)
-print(f"Original count of raw data: {len(cafes)}")
+query_data = ox.features_from_place(place, tags)
+print(f"Original count of raw data: {len(query_data)}")
 
 #data filtering
-cafes = cafes[cafes.geom_type == 'Point']
-# cafes = cafes.dropna(subset=['name'])
-print(f"Remaing count count of raw data: {len(cafes)}")
-# data cleaning columns
-cafes_df = cafes[['name', 'amenity', 'geometry']]
+query_data = query_data.dropna(subset=['name'])
+print(f"Remaing count count of raw data: {len(query_data)}")
 
-# #save file 
-cafes_df.to_file(r"WebGIS Pro Academy\GIS Python\selfpractice\practice osmx\final_data2.geojson", driver="GeoJSON")
+#centroids 
+polygon = query_data[query_data.geom_type == 'Polygon']
+points = query_data[query_data.geom_type == 'Point']
+polygon["geometry"] = polygon["geometry"].centroid
 
 
-# print(len(cafes_df))
+#merge the data into gdf
+gdf_merged = gpd.GeoDataFrame(pd.concat([polygon, points], ignore_index=True))
+
+##save file and filter only columns to export
+gdf_merged = gdf_merged[['name', 'amenity', 'geometry']]
+gdf_merged.to_file(r"WebGIS Pro Academy\GIS Python\selfpractice\practice osmx\merge_data_1.geojson", driver="GeoJSON")
+
+
+# print(len(query_data_df))
 
 #plot
-# cafes_df.plot(figsize=(10, 10), color='brown', markersize=5)
-# plt.title("Cafes in Manila (OSM Data)")
+# query_data_df.plot(figsize=(10, 10), color='brown', markersize=5)
+# plt.title("query_data in Manila (OSM Data)")
 # plt.xlabel("Longitude")
 # plt.ylabel("Latitude")
 # plt.grid(True)
