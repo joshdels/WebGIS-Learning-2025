@@ -1,14 +1,14 @@
 let map = L.map("myMap").setView([0, 0], 3);
 
 let osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
+  maxZoom: 20,
   attribution: "© OpenStreetMap",
 });
 
 let osmHOT = L.tileLayer(
   "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
   {
-    maxZoom: 19,
+    maxZoom: 20,
     attribution:
       "© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France",
   }
@@ -19,14 +19,14 @@ let esriSat = L.tileLayer(
   {
     attribution:
       "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
-    maxZoom: 19,
+    maxZoom: 20,
   }
 );
 
 let esriLabels = L.tileLayer(
   "https://services.arcgisonline.com/arcgis/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
   {
-    maxZoom: 19,
+    maxZoom: 20,
     attribution: "Labels © Esri",
     pane: "overlayPane",
     opacity: 0.9,
@@ -34,14 +34,14 @@ let esriLabels = L.tileLayer(
 );
 let googleSat = L.tileLayer(
   "http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}",
-  { attribution: "© Google satellite", maxZoom: 19 }
+  { attribution: "© Google satellite", maxZoom: 20 }
 );
 
 let carto = L.tileLayer(
   'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', 
   {
     attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
-    maxZoom: 19
+    maxZoom: 20
   }
 ).addTo(map);
 
@@ -69,6 +69,50 @@ let markers = L.markerClusterGroup({
   }
 });
 
+//style switches
+function getIcon(type) {
+  let iconHtml = '';
+  let iconColor = '';
+
+  switch(type) {
+    case 'hospital':
+      iconHtml = '<i class="fas fa-hospital"></i>';
+      iconColor = 'crimson';
+      break
+    case 'fast_food':
+      iconHtml = '<i class="fa-solid fa-burger"></i>';
+      iconColor = 'gold';
+      break
+    case 'restaurant':
+      iconHtml = '<i class="fa-solid fa-utensils"></i>';
+      iconColor = 'sienna';
+      break
+    case 'school':
+      iconHtml = '<i class="fa-solid fa-school"></i>';
+      iconColor = 'mediumblue';
+      break
+    case 'place_of_worship':
+      iconHtml = '<i class="fa-solid fa-place-of-worship"></i>';
+      iconColor = 'seagreen';
+      break
+    case 'cafe':
+      iconHtml = '<i class="fa-solid fa-mug-saucer"></i>';
+      iconColor = 'chocolate';
+      break
+    default:
+      iconHtml = '<i class="fas fa-map-marker-alt"></i>';
+      iconColor = 'black';
+  }
+  return L.divIcon({
+    html: `<div style="color: ${iconColor}; font-size: 24px;">${iconHtml}</div>`,
+    className: 'custom-div-icon',
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30]
+  });
+}
+
+
 // Data
 let geojsonPath = "data/merge_data_1.geojson";
 let geojsonLayer;
@@ -82,16 +126,16 @@ fetch(path)
   .then((data) => {
     geojsonLayer = L.geoJSON(data, {
       pointToLayer: function (feature, latlng) {
-        return L.marker(latlng);
+        return L.marker(latlng, {
+          icon: getIcon(feature.properties.amenity)
+        });
       },
       onEachFeature: function (feature, layer) {
-        layer.bindPopup(
-          "<h4>Location Detail</h4>" +
-            "<br> Name: " +
-            feature.properties.name +
-            "<br> Type: " +
-            feature.properties.amenity.replace(/_/g, " ")
-        );
+        layer.bindPopup(`
+          <h4 class="text-center"><i class="fas fa-map-marker-alt"></i> Location</h4> 
+          <hr></hr>
+          <p class="text-center"> ${feature.properties.name}</p>
+        `);
       },
     })
     //adding cluster layer
@@ -137,3 +181,33 @@ L.control.fullExtent = function(opts) {
 }
 
 L.control.fullExtent({ position: 'topleft' }).addTo(map);
+
+//Legend
+const legend = L.control({position: 'topleft'})
+
+legend.onAdd = function (map) {
+  const div = L.DomUtil.create('div', 'info legend');
+
+  const types = {
+    hospital: { icon: 'fas fa-hospital', color: 'crimson' },
+    fast_food: { icon: 'fas fa fa-burger', color: 'gold' },
+    restaurant: { icon: 'fa-solid fa-utensils', color: 'sienna' },
+    cafe: { icon: 'fas fa-mug-saucer', color: 'chocolate' },
+    school: { icon: 'fas fa- fa-school', color: 'mediumblue' },
+    place_of_worship: { icon: 'fas fa-place-of-worship', color: 'seagreen' },
+    };
+
+  div.innerHTML = "<h6>Legend</h6>"
+  // Loop through each type and generate label with colored square
+  for (let type in types) {
+    div.innerHTML += `
+      <i class="${types[type].icon}" style="color:${types[type].color}; margin-right:8px;"></i>
+      ${type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}<br/>
+    `;
+  }
+
+  return div;
+};
+
+legend.addTo(map);
+
