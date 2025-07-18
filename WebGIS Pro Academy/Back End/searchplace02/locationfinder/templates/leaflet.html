@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
@@ -22,8 +21,9 @@
   <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand">Urban Explorer</a>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="location" placeholder="Enter Your City" aria-label="Location"/>
+      <form class="d-flex" role="search" method="POST" action="{% url 'geojson_data' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" name="place" placeholder="Enter Your City"/>
         <button class="btn btn-outline-primary" type="submit">Search</button>
       </form>
     </div>
@@ -31,8 +31,9 @@
 
   <!-- Map -->
   <div id="myMap"></div>
+
   <script>
-    let geojsonPath = "{% static 'data/merge_data_1.geojson' %}";
+    let geojsonPath = "{% url 'geojson_data' %}"
   </script>
   
   <script src="{% static 'app.js' %}"></script>
