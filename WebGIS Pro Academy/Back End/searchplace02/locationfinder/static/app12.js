@@ -75,26 +75,6 @@ function getIcon(type) {
   let iconColor = '';
 
   switch(type) {
-    case 'hospital':
-      iconHtml = '<i class="fas fa-hospital"></i>';
-      iconColor = 'crimson';
-      break
-    case 'fast_food':
-      iconHtml = '<i class="fa-solid fa-burger"></i>';
-      iconColor = 'gold';
-      break
-    case 'restaurant':
-      iconHtml = '<i class="fa-solid fa-utensils"></i>';
-      iconColor = 'sienna';
-      break
-    case 'school':
-      iconHtml = '<i class="fa-solid fa-school"></i>';
-      iconColor = 'mediumblue';
-      break
-    case 'place_of_worship':
-      iconHtml = '<i class="fa-solid fa-place-of-worship"></i>';
-      iconColor = 'seagreen';
-      break
     case 'cafe':
       iconHtml = '<i class="fa-solid fa-mug-saucer"></i>';
       iconColor = 'chocolate';
@@ -116,39 +96,46 @@ function getIcon(type) {
 // Data
 let geojsonLayer;
 
-// Data handler
+// Data handler - only loads if geojsonPath is available
 function loadData(path){
-fetch(path)
-  .then((response) => {
-    return response.json();
-  })
-  .then((data) => {
-    geojsonLayer = L.geoJSON(data, {
-      pointToLayer: function (feature, latlng) {
-        return L.marker(latlng, {
-          icon: getIcon(feature.properties.amenity)
-        });
-      },
-      onEachFeature: function (feature, layer) {
-        layer.bindPopup(`
-          <h4 class="text-center"><i class="fas fa-map-marker-alt"></i> Location</h4> 
-          <hr></hr>
-          <p class="text-center"> ${feature.properties.name}</p>
-        `);
-      },
+  // Clear previous layers
+  markers.clearLayers(); // Clear old markers
+  if (geojsonLayer) map.removeLayer(geojsonLayer); // Remove old GeoJSON layer
+
+  fetch(path)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
     })
-    //adding cluster layer
-    map.addLayer(markers);
-    markers.addLayer(geojsonLayer);
+    .then((data) => {
+      geojsonLayer = L.geoJSON(data, {
+        pointToLayer: function (feature, latlng) {
+          return L.marker(latlng, {
+            icon: getIcon(feature.properties.amenity)
+          });
+        },
+        onEachFeature: function (feature, layer) {
+          layer.bindPopup(`
+            <h4 class="text-center"><i class="fas fa-map-marker-alt"></i> Location</h4> 
+            <hr></hr>
+            <p class="text-center"> ${feature.properties.name}</p>
+          `);
+        },
+      });
+      
+      // Add to cluster layer
+      map.addLayer(markers);
+      markers.addLayer(geojsonLayer);
 
-    //zoom in to the extent
-    map.fitBounds(geojsonLayer.getBounds());
-
-  })
-  .catch((error) => {
-    console.log(`This is the error: ${error}`);
-  });
-};
+      // Zoom to extent
+      map.fitBounds(geojsonLayer.getBounds());
+    })
+    .catch((error) => {
+      console.log(`No data available or error loading data: ${error}`);
+    });
+}
 
 loadData(geojsonPath);
 
@@ -188,12 +175,7 @@ legend.onAdd = function (map) {
   const div = L.DomUtil.create('div', 'info legend');
 
   const types = {
-    hospital: { icon: 'fas fa-hospital', color: 'crimson' },
-    fast_food: { icon: 'fas fa fa-burger', color: 'gold' },
-    restaurant: { icon: 'fa-solid fa-utensils', color: 'sienna' },
     cafe: { icon: 'fas fa-mug-saucer', color: 'chocolate' },
-    school: { icon: 'fas fa- fa-school', color: 'mediumblue' },
-    place_of_worship: { icon: 'fas fa-place-of-worship', color: 'seagreen' },
     };
 
   div.innerHTML = "<h6>Legend</h6>"
