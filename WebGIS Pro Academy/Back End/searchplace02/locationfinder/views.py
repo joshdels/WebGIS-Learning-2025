@@ -9,16 +9,11 @@ import pandas as pd
 
 # Create your views here.
 def index(request):
-  geojson = request.session.pop('geojson', None)
-  location = request.session.pop('location', '')
-  return render(request, 'leaflet.html', {
-    'geojson': geojson,
-    'location': location
-  })
+  return render(request, 'leaflet.html')
 
 def process_data(request):
-    if request.method in ['POST']:
-        location =  request.POST.get('place')
+    if request.method in ['GET']:
+        location =  request.GET.get('place')
         print(f'Location received: {location}')
         
         if not location:
@@ -53,9 +48,15 @@ def process_data(request):
 
         geojson_data = gdf_merged.to_json()
 
+        return HttpResponse(geojson_data, content_type='application/json')
+      
+      
         # Save to session
         request.session['geojson'] = geojson_data
         request.session['location'] = location
+        
+        print(geojson_data)
+        print(location)
 
         return redirect('index')
     
@@ -63,6 +64,8 @@ def process_data(request):
   
 def serve_geojson(request):
     geojson_data = request.session.get('geojson')
+    print(geojson_data)
+    print("manila_data")
     if geojson_data:
         return HttpResponse(geojson_data, content_type='application/json')
     return JsonResponse({'error': 'No data available'}, status=404)

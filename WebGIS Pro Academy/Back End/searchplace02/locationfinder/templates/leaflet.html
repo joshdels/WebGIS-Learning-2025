@@ -21,8 +21,7 @@
   <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand">Urban Explorer</a>
-      <form class="d-flex" role="search" method="POST" action="{% url 'geojson_data' %}">
-        {% csrf_token %}
+      <form class="d-flex" role="search" method="GET" action="/process/">
         <input class="form-control me-2" name="place" placeholder="Enter Your City"/>
         <button class="btn btn-outline-primary" type="submit">Search</button>
       </form>
@@ -33,6 +32,7 @@
   <div id="myMap"></div>
 
   <script>
+    //let geojsonPath = "{% url 'geojson_data' %}"
     let geojsonPath = "{% url 'geojson_data' %}"
   </script>
   
