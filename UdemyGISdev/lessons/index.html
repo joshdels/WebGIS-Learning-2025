@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="./lib/leaflet-wizzard.css">
+    <link rel="stylesheet" href="./lib/MarkerCluster.css">
+    <link rel="stylesheet" href="./lib/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <title>Leaflet Geoproject</title>
     <style>
       #map {
@@ -17,28 +21,43 @@
     <div id="map"></div>
     <button onclick="fullScreenview()">View in full screen</button>
     <div class="coordinate"></div>
+    <button class="print-map">Print Map</button>
+    <button class="zoom-to-layer">Zoom</button>
   </body>
 </html>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="./lib/leaflet.browser.print.min.js"></script>
+<script src="./lib/leaflet-measure.js"></script>
+<script src="./data/geo.js"></script>
+<script src="./lib/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
 <script>
   //Map initialize
-  var map = L.map("map").setView([51.505, -0.09], 13);
+  var map = L.map("map").setView([7.406 , 40.40], 8);
   map.zoomControl.setPosition("topright");
 
   // adding tile layer
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  var osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
-  // Marker
-  L.marker([51.5, -0.09])
-    .addTo(map)
-    .bindPopup("A pretty CSS popup.<br> Easily customizable.")
-    .openPopup();
+  var smooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
+    minZoom: 0,
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    ext: 'png'
+  });
+
+  var darkforest = L.tileLayer('https://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}{r}.png?apikey={apikey}', {
+    attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    apikey: '<your apikey>',
+    maxZoom: 22
+  });
+
 
   //Add map scale
   L.control
@@ -58,7 +77,56 @@
 
   // Map Coordinate display
   map.on('mousemove', function(result) {
-    console.log(result);
     $('.coordinate').html(`Lat:  ${result.latlng.lat} Lng: ${result.latlng.lng}`)
   })
+
+  //Map function
+  $('.print-map').click(function(){
+    window.print();
+  })
+
+  L.control.browserPrint().addTo(map);
+
+  //Measure function
+  L.control.measure({
+    position: 'topright',
+    primaryLengthUnit: 'kilometers',
+    secondaryLengthUnit: 'meters',
+    primaryAreaUnit: 'sqmeters',
+     secondaryAreaUnit: undefined
+  }).addTo(map);
+
+  //Geojson data
+  var marker = L.markerClusterGroup();
+  var data = L.geoJSON(data, {
+    onEachFeature: function(feature, layer) {
+      layer.bindPopup(feature.properties.name);
+    }
+  });
+
+  data.addTo(marker);
+  marker.addTo(map);
+
+  //Geocoder
+  new L.Control.Geocoder().addTo(map);
+
+  //Leaflet Layer Control
+  var baseMaps = {
+    'OSM': osm,
+    'Aliba': smooth,
+    'Dark-Forest': darkforest,
+  }
+
+  var overlayLayers = {
+    'GeoJSON Markes': marker
+  }
+
+  L.control.layers(baseMaps, overlayLayers).addTo(map)
+  
+  //Zoom to layer
+  $('.zoom-to-layer').click(function(){
+    map.setView([7.406 , 40.40], 8);
+  });
+
+
 </script>
