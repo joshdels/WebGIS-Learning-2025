@@ -14,6 +14,7 @@ params = {
 
 response = requests.get(url, params=params)
 data = response.json()
+print(data)
 
 for img in data.get("data", []):
     print(f"📸 Image: {img['thumb_640_url']}")
