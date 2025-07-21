@@ -52,8 +52,11 @@ def process_data(request):
 
             gdf_merged = gpd.GeoDataFrame(pd.concat([polygon, points], ignore_index=True))
             #i might add api to add photos and reviews
-            gdf_merged = gdf_merged[['name', 'amenity', 'geometry']]
+            columns_to_keep = [col for col in ['name', 'amenity', 'geometry', 'cuisine', 'facebook', 'website'] if col in gdf_merged.columns]
+            gdf_merged = gdf_merged[columns_to_keep]
 
+            # gdf_merged.to_file("cafe.geojson", driver="GeoJSON")
+            
             geojson_data = gdf_merged.to_json()
             request.session['geojson'] = geojson_data
             request.session['location'] = location

@@ -59,7 +59,7 @@ let markers = L.markerClusterGroup({
   iconCreateFunction: function(cluster) {
     let count = cluster.getChildCount();
 
-    let radius = Math.min(80, 30 + count);
+    let radius = Math.min(50, 30 + count);
 
     return L.divIcon({
       html: `<div style="width:${radius}px;height:${radius}px;line-height:${radius}px;">${count}</div>`,
@@ -80,7 +80,7 @@ function getIcon(type) {
       iconColor = 'chocolate';
       break
     default:
-      iconHtml = '<i class="fas fa-map-marker-alt"></i>';
+      iconHtml = '<i class="fa-solid fa-mug-saucer"></i>';
       iconColor = 'black';
   }
   return L.divIcon({
@@ -117,10 +117,37 @@ function loadData(path){
           });
         },
         onEachFeature: function (feature, layer) {
+          function formatCuisine(cuisineString) {
+            if (!cuisineString) return "N/A";
+
+            return cuisineString
+              .split(';')
+              .map(item =>
+                item
+                  .trim()
+                  .split('_')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ')
+              )
+              .join(', ');
+          }
+
+          //popups
           layer.bindPopup(`
-            <h4 class="text-center"><i class="fas fa-map-marker-alt"></i> Location</h4> 
-            <hr></hr>
-            <p class="text-center"> ${feature.properties.name}</p>
+            <h4 class="text-start mb-2"><i class="fas fa-map-marker-alt"></i> <strong>Location</strong> </h4> 
+            <hr mb-2>
+            <p class="text-start m-0"><strong>Cafe:</strong> ${feature.properties.name}</p>
+            <p class="text-start m-0"><strong>Cusine:</strong> ${formatCuisine(feature.properties.cuisine)}</p>
+            <p class="text-start m-0"><strong>Website:</strong> 
+              <a href="${feature.properties.website || '#'}" target="_blank" rel="noopener">
+                ${feature.properties.website || 'N/A'}
+              </a>
+            </p>
+            <p class="text-start m-0"><strong>FB:</strong> 
+              <a href="${feature.properties.website || '#'}" target="_blank" rel="noopener">
+                ${feature.properties.website || 'N/A'}
+              </a>
+            </p>
           `);
         },
       });
@@ -169,26 +196,26 @@ L.control.fullExtent = function(opts) {
 L.control.fullExtent({ position: 'topleft' }).addTo(map);
 
 //Legend
-const legend = L.control({position: 'topleft'})
+// const legend = L.control({position: 'topleft'})
 
-legend.onAdd = function (map) {
-  const div = L.DomUtil.create('div', 'info legend');
+// legend.onAdd = function (map) {
+//   const div = L.DomUtil.create('div', 'info legend');
 
-  const types = {
-    cafe: { icon: 'fas fa-mug-saucer', color: 'chocolate' },
-    };
+//   const types = {
+//     cafe: { icon: 'fas fa-mug-saucer', color: 'chocolate' },
+//     };
 
-  div.innerHTML = "<h6>Legend</h6>"
-  // Loop through each type and generate label with colored square
-  for (let type in types) {
-    div.innerHTML += `
-      <i class="${types[type].icon}" style="color:${types[type].color}; margin-right:8px;"></i>
-      ${type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}<br/>
-    `;
-  }
+//   div.innerHTML = "<h6>Legend</h6>"
+//   // Loop through each type and generate label with colored square
+//   for (let type in types) {
+//     div.innerHTML += `
+//       <i class="${types[type].icon}" style="color:${types[type].color}; margin-right:8px;"></i>
+//       ${type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}<br/>
+//     `;
+//   }
 
-  return div;
-};
+//   return div;
+// };
 
-legend.addTo(map);
+// legend.addTo(map);
 
