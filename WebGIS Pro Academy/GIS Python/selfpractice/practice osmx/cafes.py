@@ -3,10 +3,13 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 import pandas as pd
 
+import os
+os.environ["PROJ_LIB"] = r"C:\Users\deleo\miniconda3\envs\webgisbackend\Library\share\proj"
+
 # Define a place or polygon
-place = "Tagum City"
+place = "Tagum, Philippines"
 tags = {
-  'amenity': ['cafe', 'restaurant', 'fast_food', 'supermarket', 'general', 'department_store', 'school', 'hospital', 	'place_of_worship'], 
+  'amenity': ['cafe'], 
   }
 
 try:
@@ -32,18 +35,17 @@ else:
 
   #merge the data into gdf
   gdf_merged = gpd.GeoDataFrame(pd.concat([polygon, points], ignore_index=True))
-  gdf_merged = gdf_merged[['name', 'amenity', 'geometry']]
+  # gdf_merged = gdf_merged[['name', 'amenity', 'geometry']]
   
   ##save file and filter only columns to export
-  # gdf_merged.to_file(r"WebGIS Pro Academy\GIS Python\selfpractice\practice osmx\merge_data_1.geojson", driver="GeoJSON")
+  gdf_merged.to_file(r"WebGIS Pro Academy\GIS Python\selfpractice\practice osmx\check_data.geojson", driver="GeoJSON")
 
   # print(len(query_data_df))
-
-  # plot
-  gdf_merged.plot(figsize=(10, 10), color='brown', markersize=5)
-  plt.title("query_data in Manila (OSM Data)")
-  plt.xlabel("Longitude")
-  plt.ylabel("Latitude")
-  plt.grid(True)
-  plt.show()
+  # # plot
+  # gdf_merged.plot(figsize=(10, 10), color='brown', markersize=5)
+  # plt.title("query_data in Manila (OSM Data)")
+  # plt.xlabel("Longitude")
+  # plt.ylabel("Latitude")
+  # plt.grid(True)
+  # plt.show()
 

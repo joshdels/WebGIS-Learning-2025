@@ -51,6 +51,7 @@ def process_data(request):
             polygon["geometry"] = polygon["geometry"].centroid
 
             gdf_merged = gpd.GeoDataFrame(pd.concat([polygon, points], ignore_index=True))
+            #i might add api to add photos and reviews
             gdf_merged = gdf_merged[['name', 'amenity', 'geometry']]
 
             geojson_data = gdf_merged.to_json()
