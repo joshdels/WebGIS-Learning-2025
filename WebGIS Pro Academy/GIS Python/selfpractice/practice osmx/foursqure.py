@@ -1,7 +1,7 @@
 import requests
 
 # 🔑 Replace with your actual Foursquare API key
-API_KEY = "HPQ1NX5T1C4GL5KIE5EYPYCZHMZQJL30P50OYYD4BHZ1CVLZ"
+API_KEY = "fsq3 RIWA3M5ZPGA4DWJZB5Q1OFUMFNOOMVUHWFGXKHNQEPON1RJD"
 
 # 📍 Example location: Cagayan de Oro, Philippines
 latitude = 50.937531
@@ -11,17 +11,22 @@ query = "cafe"
 # 🧭 Search nearby places
 search_url = "https://api.foursquare.com/v3/places/search"
 headers = {
-    "Accept": "application/json",
-    "Authorization": API_KEY
+    "accept": "application/json",
+    "X-Places-Api-Version": "2025-06-17",
+    "authorization": "Bearer RIWA3M5ZPGA4DWJZB5Q1OFUMFNOOMVUHWFGXKHNQEPON1RJD"
 }
+
 params = {
     "query": query,
     "ll": f"{latitude},{longitude}",
-    "limit": 1  # Just one result for sample
+    "limit": 10,  # Just one result for sample
+    "radius": 50
 }
 
 response = requests.get(search_url, headers=headers, params=params)
 results = response.json()
+print("Status code:", response.status_code)
+print("Response:", response.text)
 
 if "results" in results and len(results["results"]) > 0:
     place = results["results"][0]

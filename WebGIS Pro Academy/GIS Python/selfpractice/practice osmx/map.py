@@ -2,7 +2,7 @@ import requests
 
 # Replace with your access token from Mapillary
 token = "MLY|23955472190800645|e121129678d5cde5b483bf4f327fe798"
-lat, lon = 8.4772, 124.6452  # Example: Cagayan de Oro
+lat, lon = 37.7749, -122.4194  # Example: Cagayan de Oro
 
 url = "https://graph.mapillary.com/images"
 params = {
@@ -13,6 +13,7 @@ params = {
 }
 
 response = requests.get(url, params=params)
+print(response.text)
 data = response.json()
 print(data)
 
