@@ -55,20 +55,6 @@ let Basemaps = {
   "Google": googleSat,
 };
 
-let markers = L.markerClusterGroup({
-  iconCreateFunction: function(cluster) {
-    let count = cluster.getChildCount();
-
-    let radius = Math.min(50, 30 + count);
-
-    return L.divIcon({
-      html: `<div style="width:${radius}px;height:${radius}px;line-height:${radius}px;">${count}</div>`,
-      className: "custom-cluster",
-      iconSize: L.point(radius, radius)
-    });
-  }
-});
-
 //style switches
 function getIcon(type) {
   let iconHtml = '';
@@ -99,7 +85,6 @@ let geojsonLayer;
 // Data handler - only loads if geojsonPath is available
 function loadData(path){
   // Clear previous layers
-  markers.clearLayers(); // Clear old markers
   if (geojsonLayer) map.removeLayer(geojsonLayer); // Remove old GeoJSON layer
 
   fetch(path)
@@ -153,8 +138,7 @@ function loadData(path){
       });
       
       // Add to cluster layer
-      map.addLayer(markers);
-      markers.addLayer(geojsonLayer);
+      map.addLayer(geojsonLayer);
 
       // Zoom to extent
       map.fitBounds(geojsonLayer.getBounds());
@@ -195,27 +179,36 @@ L.control.fullExtent = function(opts) {
 
 L.control.fullExtent({ position: 'topleft' }).addTo(map);
 
-//Legend
-// const legend = L.control({position: 'topleft'})
+// Download SHP button
+let downloadControl = L.control({ position: 'topright' });
 
-// legend.onAdd = function (map) {
-//   const div = L.DomUtil.create('div', 'info legend');
+downloadControl.onAdd = function (map) {
+  let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
 
-//   const types = {
-//     cafe: { icon: 'fas fa-mug-saucer', color: 'chocolate' },
-//     };
+  container.innerHTML = `
+    <a href="${geojsonPath}" download="${cafeplace}.json" class="btn-download" title="Download Shapefile">
+      <i class="fa-solid fa-download"></i>
+    </a>
+  `;
 
-//   div.innerHTML = "<h6>Legend</h6>"
-//   // Loop through each type and generate label with colored square
-//   for (let type in types) {
-//     div.innerHTML += `
-//       <i class="${types[type].icon}" style="color:${types[type].color}; margin-right:8px;"></i>
-//       ${type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}<br/>
-//     `;
-//   }
+  container.style.width = '50px';
+  container.style.height = '50px';
+  container.style.display = 'flex';
+  container.style.alignItems = 'center';
+  container.style.justifyContent = 'center';
+  container.style.backgroundColor = '#fff';
 
-//   return div;
-// };
+  // Hover effect
+  container.onmouseover = () => {
+    container.style.backgroundColor = '#f0f0f0';
+    container.style.cursor = 'pointer';
+  };
+  container.onmouseout = () => {
+    container.style.backgroundColor = '#fff';
+  };
 
-// legend.addTo(map);
+  return container;
+};
+
+downloadControl.addTo(map);
 
