@@ -8,13 +8,10 @@
     <link rel="stylesheet" href="./lib/MarkerCluster.css">
     <link rel="stylesheet" href="./lib/MarkerCluster.Default.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="./dist/styles.css">
+    <link rel="stylesheet" href="./dist/webgis.js">
     <title>Leaflet Geoproject</title>
-    <style>
-      #map {
-        width: 100%;
-        height: 700px;
-      }
-    </style>
+
   </head>
 
   <body>
@@ -30,103 +27,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="./lib/leaflet.browser.print.min.js"></script>
 <script src="./lib/leaflet-measure.js"></script>
-<script src="./data/geo.js"></script>
 <script src="./lib/leaflet.markercluster.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="./data/geo.js"></script>
+<script src="./dist/main.js"></script>
+<script src="./dist/webgis.js"></script>
 
-<script>
-  //Map initialize
-  var map = L.map("map").setView([7.406 , 40.40], 8);
-  map.zoomControl.setPosition("topright");
-
-  // adding tile layer
-  var osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map);
-
-  var smooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
-    minZoom: 0,
-    maxZoom: 20,
-    attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    ext: 'png'
-  });
-
-  var darkforest = L.tileLayer('https://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}{r}.png?apikey={apikey}', {
-    attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    apikey: '<your apikey>',
-    maxZoom: 22
-  });
-
-
-  //Add map scale
-  L.control
-    .scale({
-      position: "bottomleft",
-      imperial: true,
-      metric: true,
-      maxWidth: 200,
-    })
-    .addTo(map);
-
-  // Full screen Map
-  var mapId = document.getElementById("map");
-  function fullScreenview() {
-    mapId.requestFullscreen();
-  }
-
-  // Map Coordinate display
-  map.on('mousemove', function(result) {
-    $('.coordinate').html(`Lat:  ${result.latlng.lat} Lng: ${result.latlng.lng}`)
-  })
-
-  //Map function
-  $('.print-map').click(function(){
-    window.print();
-  })
-
-  L.control.browserPrint().addTo(map);
-
-  //Measure function
-  L.control.measure({
-    position: 'topright',
-    primaryLengthUnit: 'kilometers',
-    secondaryLengthUnit: 'meters',
-    primaryAreaUnit: 'sqmeters',
-     secondaryAreaUnit: undefined
-  }).addTo(map);
-
-  //Geojson data
-  var marker = L.markerClusterGroup();
-  var data = L.geoJSON(data, {
-    onEachFeature: function(feature, layer) {
-      layer.bindPopup(feature.properties.name);
-    }
-  });
-
-  data.addTo(marker);
-  marker.addTo(map);
-
-  //Geocoder
-  new L.Control.Geocoder().addTo(map);
-
-  //Leaflet Layer Control
-  var baseMaps = {
-    'OSM': osm,
-    'Aliba': smooth,
-    'Dark-Forest': darkforest,
-  }
-
-  var overlayLayers = {
-    'GeoJSON Markes': marker
-  }
-
-  L.control.layers(baseMaps, overlayLayers).addTo(map)
-  
-  //Zoom to layer
-  $('.zoom-to-layer').click(function(){
-    map.setView([7.406 , 40.40], 8);
-  });
-
-
-</script>
